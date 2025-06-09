@@ -1,10 +1,12 @@
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter, PT_Serif } from "next/font/google";
 
 import "./globals.css";
 
-const playfairDisplay = Playfair_Display({
+const ptSerif = PT_Serif({
+  weight: ["400", "700"], // or just ['400'] if you only need one
+  style: ["normal"], // or just ['normal'] if you only need one
   subsets: ["latin"],
-  variable: "--font-playfairDisplay",
+  variable: "--font-ptSerif",
 });
 
 const inter = Inter({
@@ -20,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${playfairDisplay.variable} scroll-smooth`}
+        className={`${inter.variable} ${ptSerif.variable} scroll-smooth bg-background`}
       >
         {children}
       </body>
