@@ -34,11 +34,37 @@ const foodIcons = [
 
 const getRandomOffset = () => Math.random() * 10 - 5;
 
-const getRandomPosition = () => ({
-  top: Math.random() * window.innerHeight,
-  left: Math.random() * window.innerWidth,
-  rotate: Math.random() * 360,
-});
+const getRandomPositionInCircle = () => {
+  let radius = 0;
+
+  if (window.innerWidth < 767) {
+    radius = window.innerWidth * 0.6;
+  } else {
+    radius = 600;
+  }
+
+  const centerX = window.innerWidth / 2;
+  const centerY = window.innerHeight / 2;
+  const r = Math.sqrt(Math.random()) * radius;
+  const angle = Math.random() * 2 * Math.PI; // random angle in radians
+
+  let y = 0;
+  const x = centerX + r * Math.cos(angle);
+
+  if (window.innerWidth < 767) {
+    y = centerY + r * Math.sin(angle) * 2.5;
+    radius = window.innerWidth * 0.6;
+  } else {
+    y = centerY + r * Math.sin(angle);
+    radius = 600;
+  }
+
+  return {
+    top: y,
+    left: x,
+    rotate: Math.random() * 360,
+  };
+};
 
 export default function Home() {
   const [positions, setPositions] = useState<
@@ -48,7 +74,7 @@ export default function Home() {
   const [offsets, setOffsets] = useState<Array<{ x: number; y: number }>>([]);
 
   useEffect(() => {
-    setPositions(foodIcons.map(() => getRandomPosition()));
+    setPositions(foodIcons.map(() => getRandomPositionInCircle()));
     setOffsets(foodIcons.map(() => ({ x: 0, y: 0 })));
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -114,7 +140,18 @@ export default function Home() {
 
   return (
     <div className="container mx-auto px-5">
-      <div className="fixed inset-0 pointer-events-none z-50">
+      <div className="flex items-center flex-col justify-center h-screen">
+        <h1 className="md:text-7xl sm:text-6xl text-5xl mb-8 text-center font-ptSerif font-bold text-title">
+          Welcome to ezrecipe
+        </h1>
+        <h2 className="md:text-3xl sm:text-2xl text-xl text-center font-inter text-body">
+          Your no-bullshit recipes saver
+        </h2>
+        <button className="bg-pastelYellow text-title rounded-xl mt-10 px-8 py-4 font-inter font-bold border-2 transition border-title hover:drop-shadow-[4px_4px_0px] drop-shadow-shadow">
+          Get Started
+        </button>
+      </div>
+      <div className="fixed inset-0 pointer-events-none -z-50">
         {foodIcons.map((src, index) => (
           <div key={index}>
             <motion.div
@@ -136,18 +173,6 @@ export default function Home() {
             </motion.div>
           </div>
         ))}
-      </div>
-
-      <div className="flex items-center flex-col justify-center h-screen">
-        <h1 className="md:text-7xl sm:text-6xl text-5xl mb-8 text-center font-ptSerif font-bold text-title">
-          Welcome to ezrecipe
-        </h1>
-        <h2 className="md:text-3xl sm:text-2xl text-xl text-center font-inter text-body">
-          Your no-bullshit recipes saver
-        </h2>
-        <button className="bg-pastelYellow text-title rounded-xl mt-10 px-8 py-4 font-inter font-bold border-2 transition border-title hover:drop-shadow-[4px_4px_0px] drop-shadow-shadow">
-          Get Started
-        </button>
       </div>
     </div>
   );
