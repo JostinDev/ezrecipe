@@ -87,14 +87,14 @@ export default function Home() {
     const dx = x - mousePos.x;
     const dy = y - mousePos.y;
     const dist = Math.sqrt(dx * dx + dy * dy);
-    if (dist < 80) {
+    if (dist < 100) {
       return {
         x: dx * 0.4,
         y: dy * 0.4,
         transition: {
           type: "spring" as const,
           stiffness: 300,
-          damping: 20,
+          damping: 100,
         },
       };
     }
