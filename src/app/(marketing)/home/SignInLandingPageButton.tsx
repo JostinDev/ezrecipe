@@ -1,10 +1,23 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton, useAuth } from "@clerk/nextjs";
 
 export default function SignInLandingPageButton() {
   const router = useRouter();
+
+  const { isLoaded } = useAuth();
+
+  if (!isLoaded) {
+    return (
+      <SignInButton mode="modal">
+        <button className="bg-pastelYellow text-title rounded-xl mt-10 px-8 py-4 font-inter font-bold border-2 transition border-title hover:drop-shadow-[4px_4px_0px] drop-shadow-shadow">
+          Get Started
+        </button>
+      </SignInButton>
+    );
+  }
+
   return (
     <div>
       <SignedOut>
