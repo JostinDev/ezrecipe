@@ -10,7 +10,7 @@ export default {
         ptSerif: ["var(--font-ptSerif)", ...defaultTheme.fontFamily.sans],
       },
       colors: {
-        background: "#FAF4E1",
+        background: "#FFF8E0",
         title: "#12100C",
         pastelBlue: "#9DD3D1",
         pastelYellow: "#F7CB55",
