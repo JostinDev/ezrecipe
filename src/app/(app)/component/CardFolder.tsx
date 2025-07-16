@@ -21,6 +21,7 @@ export default function CardFolder({
       <p className="text-titlePink font-inter text-base">
         {count} {count > 1 ? "recipes" : "recipe"}
       </p>
+      <p className="hidden">{folderId}</p>
     </div>
   );
 }

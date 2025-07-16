@@ -12,6 +12,7 @@ export default function CardRecipe({ recipeName, recipeId }: CardRecipeProps) {
       <div className="flex gap-2">
         <Image src={chef} alt="logo" width={24} height={24} />
         <p className="font-inter text-base text-titleBlue">{recipeName}</p>
+        <p className="font-inter text-base text-titleBlue hidden">{recipeId}</p>
       </div>
     </div>
   );
