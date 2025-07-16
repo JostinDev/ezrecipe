@@ -12,12 +12,10 @@ export default function Home() {
         <h2 className="md:text-3xl sm:text-2xl text-xl text-center font-inter text-body">
           Your no-bullshit recipes saver
         </h2>
-
         <ClerkProvider>
           <SignInLandingPageButton />
         </ClerkProvider>
       </div>
-
       <FloatingFood />
     </div>
   );

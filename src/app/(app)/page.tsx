@@ -1,22 +1,34 @@
-"use client";
-import { SignOutButton, ClerkProvider } from "@clerk/nextjs";
+import { getRecipes } from "@/server/queries";
+import CardFolder from "./component/CardFolder";
+import CardRecipe from "./component/CardRecipe";
 
-export default function Home() {
+export default async function Home() {
+  const { recipesWithoutFolder, folders } = await getRecipes();
+
   return (
-    <div className="container mx-auto px-5 text-center">
-      <h1 className="md:text-7xl sm:text-6xl text-5xl mb-8 text-center font-ptSerif font-bold text-title">
-        Welcome to ezrecipe
-      </h1>
-      <h2 className="md:text-3xl sm:text-2xl text-xl text-center font-inter text-body">
-        Your no-bullshit recipes saver
-      </h2>
-      <ClerkProvider>
-        <SignOutButton>
-          <button className="bg-pastelYellow text-title rounded-xl mt-10 px-8 py-4 font-inter font-bold border-2 transition border-title hover:drop-shadow-[4px_4px_0px] drop-shadow-shadow">
-            Logout
-          </button>
-        </SignOutButton>
-      </ClerkProvider>
+    <div className="max-w-[1200px] w-full mx-auto px-5">
+      <h2 className="text-[32px] font-ptSerif text-title">Folders</h2>
+      <div className="pt-4">
+        {folders.map((folder) => (
+          <CardFolder
+            key={folder.folderId}
+            folderName={folder.folderName}
+            folderId={folder.folderId}
+            count={folder.count}
+          />
+        ))}
+      </div>
+
+      <h2 className="text-[32px] font-ptSerif text-title pt-12">Recipes</h2>
+      <div className="pt-4">
+        {recipesWithoutFolder.map((recipe) => (
+          <CardRecipe
+            key={recipe.id}
+            recipeName={recipe.title}
+            recipeId={recipe.id}
+          />
+        ))}
+      </div>
     </div>
   );
 }

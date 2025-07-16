@@ -10,9 +10,7 @@ export default async function AppLayout({ children }: RootLayoutProps) {
   return (
     <div>
       <Header />
-      <div className="relative max-w-[1800px] px-4 pt-[121px] md:pt-[180px]">
-        {children}
-      </div>
+      <div className="px-4 mt-24">{children}</div>
     </div>
   );
 }
