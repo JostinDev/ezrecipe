@@ -42,3 +42,5 @@ next-env.d.ts
 
 #Visual Studio Code
 .vscode/    
+
+remote_prod.txt
