@@ -24,7 +24,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${ptSerif.variable} scroll-smooth bg-background`}
       >
-        <div className="bg-[url(/noisy-texture-200x200.png)] bg-repeat bg-size-[200px_200px]">
+        <div className="bg-[url(/noisy-texture-200x200.png)] bg-repeat bg-size-[200px_200px] min-h-svh">
           {children}
         </div>
       </body>
