@@ -70,6 +70,5 @@ export async function getRecipeById(recipeId: number) {
     throw new Error("Recipe not found or unauthorized");
   }
 
-  console.log(recipe);
   return recipe;
 }

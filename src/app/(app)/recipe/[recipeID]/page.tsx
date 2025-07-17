@@ -2,6 +2,8 @@ import { getRecipeById } from "@/server/queries";
 import CardStep from "../component/CardStep";
 import CardIngredient from "../component/CardIngredient";
 
+export const dynamic = "force-dynamic";
+
 type RecipeProps = {
   params: {
     recipeID: string;
