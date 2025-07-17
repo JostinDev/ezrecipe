@@ -1,6 +1,5 @@
 import { getRecipeById } from "@/server/queries";
-import CardStep from "../component/CardStep";
-import CardIngredient from "../component/CardIngredient";
+import RecipeDisplayer from "../component/RecipeDisplayer";
 
 type RecipeProps = {
   params: Promise<{ recipeID: string }>;
@@ -21,29 +20,11 @@ export default async function Recipe({ params }: RecipeProps) {
         </p>
       </div>
 
-      <h2 className="text-[32px] font-ptSerif text-title pt-12">Ingredients</h2>
-
-      <div className="pt-4 flex flex-wrap gap-10">
-        {recipe.ingredientGroups.map((ingredientGroup) => (
-          <CardIngredient
-            key={ingredientGroup.id}
-            ingredientGroupTitle={ingredientGroup.title}
-            ingredients={ingredientGroup.ingredients}
-          />
-        ))}
-      </div>
-
-      <h2 className="text-[32px] font-ptSerif text-title pt-12">Steps</h2>
-
-      <div className="pt-4 flex flex-col gap-10">
-        {recipe.steps.map((step, index) => (
-          <CardStep
-            key={step.id}
-            stepDescription={step.description}
-            stepIndex={index}
-          />
-        ))}
-      </div>
+      <RecipeDisplayer
+        recipePeople={recipe.people}
+        ingredientGroups={recipe.ingredientGroups}
+        steps={recipe.steps}
+      />
     </div>
   );
 }

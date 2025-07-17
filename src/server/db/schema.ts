@@ -18,6 +18,7 @@ export const unitEnum = pgEnum("metric_system_units", [
   "mg",
   "tsp",
   "tbsp",
+  "unit"
 ]);
 
 /*********** FOLDER ***********/
