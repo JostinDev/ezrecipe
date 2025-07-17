@@ -1,3 +1,5 @@
+"use client"
+
 type CardStepProps = {
   stepDescription: string;
   stepIndex: number;

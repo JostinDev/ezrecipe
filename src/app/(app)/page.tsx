@@ -23,7 +23,7 @@ export default async function Home() {
       <h2 className="text-[32px] font-ptSerif text-title pt-12">Recipes</h2>
       <div className="pt-4">
         {recipesWithoutFolder.map((recipe) => (
-          <Link href={`/recipe/${recipe.id}`} key={recipe.id}>
+          <Link href={`/recipe/${recipe.id}`} prefetch={true} key={recipe.id}>
             <CardRecipe recipeName={recipe.title} recipeId={recipe.id} />
           </Link>
         ))}
