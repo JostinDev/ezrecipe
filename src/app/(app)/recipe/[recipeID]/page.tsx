@@ -2,8 +2,6 @@ import { getRecipeById } from "@/server/queries";
 import CardStep from "../component/CardStep";
 import CardIngredient from "../component/CardIngredient";
 
-export const dynamic = "force-dynamic";
-
 type RecipeProps = {
   params: {
     recipeID: string;
@@ -11,7 +9,8 @@ type RecipeProps = {
 };
 
 export default async function Recipe({ params }: RecipeProps) {
-  const recipeID = Number(params.recipeID);
+  const param = await params; //nextjs 15 makes storing await params mandatory
+  const recipeID = Number(await param.recipeID);
 
   const recipe = await getRecipeById(recipeID);
 
