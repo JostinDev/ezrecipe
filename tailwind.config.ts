@@ -12,7 +12,7 @@ export default {
       colors: {
         background: "#FFF8E0",
         title: "#12100C",
-        pastelBlue: "#9DD3D1",
+        pastelBlue: "#C0EEEC",
         titleBlue: "#263332",
         bodyBlue: "#3D5352",
         titlePink: "#5a2c16",

@@ -47,3 +47,29 @@ export async function getRecipes() {
 
   return { recipesWithoutFolder, folders };
 }
+
+export async function getRecipeById(recipeId: number) {
+  const { userId, redirectToSignIn } = await auth();
+  if (!userId) return redirectToSignIn();
+
+  const recipe = await db.query.recipe.findFirst({
+    where: (fields, { eq, and }) =>
+      and(eq(fields.id, recipeId), eq(fields.userID, userId)),
+    with: {
+      folder: true,
+      steps: true,
+      ingredientGroups: {
+        with: {
+          ingredients: true,
+        },
+      },
+    },
+  });
+
+  if (!recipe) {
+    throw new Error("Recipe not found or unauthorized");
+  }
+
+  console.log(recipe);
+  return recipe;
+}
