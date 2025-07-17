@@ -3,14 +3,12 @@ import CardStep from "../component/CardStep";
 import CardIngredient from "../component/CardIngredient";
 
 type RecipeProps = {
-  params: {
-    recipeID: Promise<string>;
-  };
+  params: Promise<{ recipeID: string }>;
 };
 
 export default async function Recipe({ params }: RecipeProps) {
   const param = await params; //nextjs 15 makes storing await params mandatory
-  const recipeID = Number(await param.recipeID);
+  const recipeID = Number(param.recipeID);
 
   const recipe = await getRecipeById(recipeID);
 
