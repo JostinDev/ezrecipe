@@ -4,7 +4,7 @@ import CardIngredient from "../component/CardIngredient";
 
 type RecipeProps = {
   params: {
-    recipeID: string;
+    recipeID: Promise<string>;
   };
 };
 
