@@ -1,5 +1,4 @@
 import "@/app/globals.css";
-
 import Header from "./component/Header";
 
 type RootLayoutProps = {

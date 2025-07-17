@@ -1,5 +1,4 @@
 import { Inter, PT_Serif } from "next/font/google";
-
 import "./globals.css";
 
 const ptSerif = PT_Serif({
