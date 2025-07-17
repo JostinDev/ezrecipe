@@ -23,7 +23,7 @@ export default async function Home() {
           <button className="flex border z-20 relative border-title rounded-lg p-3 bg-[url(/noisy-texture-200x200.png)] bg-background bg-repeat bg-size-[200px_200px] justify-between max-w-[200px]">
             <Link href="folder/create" className="flex gap-2 z-20">
               <Image src={add} alt="logo" width={24} height={24} />
-              <p className="font-inter text-base text-title">New folder</p>
+              <p className="font-inter text-base text-title">New recipe</p>
             </Link>
           </button>
           <div className="border z-10 absolute top-0 left-0 transition-all group-hover:left-1 group-hover:top-1 w-full h-full border-title rounded-[8px] p-3"></div>
