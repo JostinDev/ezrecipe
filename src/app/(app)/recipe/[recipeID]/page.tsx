@@ -2,11 +2,13 @@ import { getRecipeById } from "@/server/queries";
 import CardStep from "../component/CardStep";
 import CardIngredient from "../component/CardIngredient";
 
-export default async function Recipe({
-  params,
-}: {
-  params: { recipeID: string };
-}) {
+type RecipeProps = {
+  params: {
+    recipeID: string;
+  };
+};
+
+export default async function Recipe({ params }: RecipeProps) {
   const recipeID = Number(params.recipeID);
 
   const recipe = await getRecipeById(recipeID);
