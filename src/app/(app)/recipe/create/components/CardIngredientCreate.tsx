@@ -1,41 +1,29 @@
 "use client";
 
 import { Ingredient } from "@/server/db/schema";
-import IngredientRow from "./IngredientRow";
+import { Input, TextField } from "react-aria-components";
+import IngredientRowCreate from "./IngredientRowCreate";
 type CardIngredientCreateProps = {
-  ingredientGroupTitle?: string;
+  title?: string;
   ingredients?: Ingredient[];
-  peopleNumber?: number;
-  basePeopleNumber?: number;
 };
 
 export default function CardIngredientCreate({
-  ingredientGroupTitle,
+  title,
   ingredients,
-  peopleNumber,
-  basePeopleNumber,
 }: CardIngredientCreateProps) {
   return (
-    <div className="flex flex-col bg-pastelBlue text-titleBlue rounded-lg p-5 max-w-[300px] w-full transition drop-shadow-[4px_4px_0px]">
-      <input
-        placeholder="Ingredient group"
-        className="font-inter text-base text-titleBlue font-bold mb-4"
-        value={ingredientGroupTitle}
-      ></input>
-      <div className="flex flex-col gap-2">
-        {ingredients
-          ? ingredients.map((ingredient) => (
-              <div key={ingredient.id} className="flex gap-2 items-center">
-                <IngredientRow
-                  amount={Number(ingredient.quantity)}
-                  unit={ingredient.unit}
-                  description={ingredient.description}
-                  basePeopleNumber={basePeopleNumber}
-                  peopleNumber={peopleNumber}
-                />
-              </div>
-            ))
-          : ""}
+    <div className="flex flex-col bg-pastelBlue text-titleBlue rounded-lg p-5 max-w-[400px] w-full transition drop-shadow-[4px_4px_0px]">
+      <TextField>
+        <Input
+          placeholder="Step instructions"
+          disabled={false}
+          className="h-10 rounded-md border font-bold bg-transparent border-dashed border-titleBlue p-2"
+        />
+      </TextField>
+
+      <div className="flex mt-4 w-full flex-col gap-2">
+        <IngredientRowCreate />
       </div>
     </div>
   );

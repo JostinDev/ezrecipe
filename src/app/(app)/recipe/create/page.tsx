@@ -1,13 +1,53 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import chevron from "@/app/(app)/img/chevron_left.svg";
 import PeopleCalculatorCreate from "./components/PeopleCalculatorCreate";
-import { ingredientGroup, step } from "@/server/db/schema";
+import { IngredientGroup, Step, step } from "@/server/db/schema";
 import CardIngredientCreate from "./components/CardIngredientCreate";
 import CardStepCreate from "./components/CardStepCreate";
 import add from "@/app/(app)/img/plus_button.svg";
+import { useState } from "react";
+import {
+  Button,
+  Dialog,
+  DialogTrigger,
+  Heading,
+  Input,
+  Label,
+  Modal,
+  TextField,
+} from "react-aria-components";
 
-export default async function Create() {
+export default function Create() {
+  type StepCard = {
+    description: string;
+  };
+
+  type IngredientGroupCard = {
+    title: string;
+  };
+
+  const [stepCards, setStepCards] = useState<StepCard[]>([]);
+  const [ingredientGroupCards, setIngredientGroupCards] = useState<
+    IngredientGroupCard[]
+  >([]);
+
+  const addStep = () => {
+    const newStep: StepCard = {
+      description: "",
+    };
+    setStepCards([...stepCards, newStep]);
+  };
+
+  const addIngredientGroupCard = () => {
+    const newIngredientGroup: IngredientGroupCard = {
+      title: "",
+    };
+    setIngredientGroupCards([...ingredientGroupCards, newIngredientGroup]);
+  };
+
   return (
     <div className="max-w-[1200px] w-full mx-auto px-5">
       <button className="flex gap-1">
@@ -30,10 +70,16 @@ export default async function Create() {
       <PeopleCalculatorCreate people={undefined} />
 
       <div className="pt-4 flex flex-wrap gap-10">
-        {ingredientGroup ? <CardIngredientCreate /> : <CardIngredientCreate />}
+        <CardIngredientCreate title="" />
+        {ingredientGroupCards.map((ingredientGroupCards, index) => (
+          <CardIngredientCreate key={index} title={""} />
+        ))}
 
         <div className="relative">
-          <button className="flex flex-col gap-4 items-center border z-20 relative border-title rounded-lg p-5 bg-[url(/noisy-texture-200x200.png)] w-full bg-background bg-repeat bg-size-[200px_200px]">
+          <button
+            onClick={() => addIngredientGroupCard()}
+            className="flex flex-col gap-4 items-center border z-20 relative border-title rounded-lg p-5 bg-[url(/noisy-texture-200x200.png)] w-full bg-background bg-repeat bg-size-[200px_200px]"
+          >
             <p className="font-inter text-base font-bold text-title">
               Add a new ingredient group
             </p>
@@ -46,11 +92,21 @@ export default async function Create() {
       <h2 className="text-[32px] font-ptSerif text-title pt-12">Steps</h2>
 
       <div className="pt-4 flex flex-col gap-10">
-        {step ? <CardStepCreate /> : <CardStepCreate />}
+        <CardStepCreate stepIndex={0} stepDescription="" />
+        {stepCards.map((stepCard, index) => (
+          <CardStepCreate
+            key={index}
+            stepDescription={""}
+            stepIndex={index + 1}
+          />
+        ))}
       </div>
 
       <div className="relative mt-10">
-        <button className="flex border z-20 relative gap-4 items-center z-20 border-title rounded-lg p-5 bg-[url(/noisy-texture-200x200.png)] w-full bg-background bg-repeat bg-size-[200px_200px]">
+        <button
+          onClick={() => addStep()}
+          className="flex border z-20 relative gap-4 items-center z-20 border-title rounded-lg p-5 bg-[url(/noisy-texture-200x200.png)] w-full bg-background bg-repeat bg-size-[200px_200px]"
+        >
           <Image src={add} alt="logo" width={40} height={40} />
           <p className="font-inter text-base font-bold text-title">
             Add a new Step
