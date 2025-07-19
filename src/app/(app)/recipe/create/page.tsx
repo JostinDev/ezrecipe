@@ -4,32 +4,45 @@ import Link from "next/link";
 import Image from "next/image";
 import chevron from "@/app/(app)/img/chevron_left.svg";
 import PeopleCalculatorCreate from "./components/PeopleCalculatorCreate";
-import { IngredientGroup, Step, step } from "@/server/db/schema";
 import CardIngredientCreate from "./components/CardIngredientCreate";
 import CardStepCreate from "./components/CardStepCreate";
 import add from "@/app/(app)/img/plus_button.svg";
-import { useState } from "react";
-import {
-  Button,
-  Dialog,
-  DialogTrigger,
-  Heading,
-  Input,
-  Label,
-  Modal,
-  TextField,
-} from "react-aria-components";
+import { useEffect, useState } from "react";
+import { step } from "@/server/db/schema";
+import { Button, Input, TextField } from "react-aria-components";
+import cross from "@/app/(app)/img/cross.svg";
 
 export default function Create() {
   type StepCard = {
     description: string;
+    index: number;
   };
 
   type IngredientGroupCard = {
     title: string;
   };
 
-  const [stepCards, setStepCards] = useState<StepCard[]>([]);
+  const [stepIndex, setStepIndex] = useState(1);
+
+  const [stepCards, setStepCards] = useState<StepCard[]>([
+    {
+      description: "",
+      index: 0,
+    },
+  ]);
+
+  const updateStepDescription = (index: number, newDescription: string) => {
+    setStepCards((prevSteps) =>
+      prevSteps.map((step, i) =>
+        i === index ? { ...step, description: newDescription } : step
+      )
+    );
+  };
+
+  useEffect(() => {
+    console.log("stepCards updated:", stepCards);
+  }, [stepCards]);
+
   const [ingredientGroupCards, setIngredientGroupCards] = useState<
     IngredientGroupCard[]
   >([]);
@@ -37,8 +50,17 @@ export default function Create() {
   const addStep = () => {
     const newStep: StepCard = {
       description: "",
+      index: stepIndex,
     };
+    setStepIndex(stepIndex + 1);
     setStepCards([...stepCards, newStep]);
+    console.log(stepCards);
+  };
+
+  const removeStepByIndex = (index: number) => {
+    console.log("Index to remove", index);
+
+    setStepCards((prevSteps) => prevSteps.filter((_, i) => i !== index));
   };
 
   const addIngredientGroupCard = () => {
@@ -92,13 +114,31 @@ export default function Create() {
       <h2 className="text-[32px] font-ptSerif text-title pt-12">Steps</h2>
 
       <div className="pt-4 flex flex-col gap-10">
-        <CardStepCreate stepIndex={0} stepDescription="" />
         {stepCards.map((stepCard, index) => (
-          <CardStepCreate
+          <TextField
             key={index}
-            stepDescription={""}
-            stepIndex={index + 1}
-          />
+            className="flex relative bg-pastelBlue text-titleBlue rounded-lg p-5 w-full transition drop-shadow-[4px_4px_0px]"
+          >
+            <div className="flex gap-4 items-center w-full">
+              <div className="text-titleBlue flex justify-center items-center font-inter text-base font-bold rounded-full border border-titleBlue p-4 w-10 h-10">
+                {index + 1}
+              </div>
+
+              <Input
+                value={stepCard.description}
+                onChange={(e) => updateStepDescription(index, e.target.value)}
+                placeholder="Step instructions"
+                disabled={false}
+                className="h-10 w-full rounded-md bg-transparent border border-titleBlue border-dashed p-2"
+              />
+            </div>
+            <Button
+              className="flex items-center justify-center absolute -top-2 -right-2 w-[30px] h-[30px] font-inter bg-background border border-title text-title rounded-full"
+              onClick={() => removeStepByIndex(index)}
+            >
+              <Image src={cross} alt="logo" width={24} height={24} />
+            </Button>
+          </TextField>
         ))}
       </div>
 
