@@ -5,14 +5,17 @@ import Image from "next/image";
 import chevron from "@/app/(app)/img/chevron_left.svg";
 import PeopleCalculatorCreate from "./components/PeopleCalculatorCreate";
 import CardIngredientCreate from "./components/CardIngredientCreate";
-import CardStepCreate from "./components/CardStepCreate";
 import add from "@/app/(app)/img/plus_button.svg";
-import { useEffect, useState } from "react";
-import { step } from "@/server/db/schema";
-import { Button, Input, TextField } from "react-aria-components";
+import { useActionState, useEffect, useState } from "react";
+import { Button, Form, Input, TextField } from "react-aria-components";
 import cross from "@/app/(app)/img/cross.svg";
+import { createRecipe } from "@/server/mutations";
 
 export default function Create() {
+  const [state, formAction, isPending] = useActionState(createRecipe, {
+    errors: {},
+  });
+
   type StepCard = {
     description: string;
     index: number;
@@ -20,13 +23,23 @@ export default function Create() {
 
   type IngredientGroupCard = {
     title: string;
+    index: number;
   };
 
   const [stepIndex, setStepIndex] = useState(1);
-
   const [stepCards, setStepCards] = useState<StepCard[]>([
     {
       description: "",
+      index: 0,
+    },
+  ]);
+
+  const [ingredientGroupIndex, setingredientGroupIndex] = useState(1);
+  const [ingredientGroupCards, setIngredientGroupCards] = useState<
+    IngredientGroupCard[]
+  >([
+    {
+      title: "",
       index: 0,
     },
   ]);
@@ -39,13 +52,18 @@ export default function Create() {
     );
   };
 
-  useEffect(() => {
-    console.log("stepCards updated:", stepCards);
-  }, [stepCards]);
+  const updateIngredientGroupTitle = (index: number, newTitle: string) => {
+    setIngredientGroupCards((prevIngredientGroup) =>
+      prevIngredientGroup.map((ingredientGroup, i) =>
+        i === index ? { ...ingredientGroup, title: newTitle } : ingredientGroup
+      )
+    );
+  };
 
-  const [ingredientGroupCards, setIngredientGroupCards] = useState<
-    IngredientGroupCard[]
-  >([]);
+  useEffect(() => {
+    console.log(ingredientGroupCards);
+    console.log(stepCards);
+  }, [ingredientGroupCards, stepCards]);
 
   const addStep = () => {
     const newStep: StepCard = {
@@ -54,7 +72,6 @@ export default function Create() {
     };
     setStepIndex(stepIndex + 1);
     setStepCards([...stepCards, newStep]);
-    console.log(stepCards);
   };
 
   const removeStepByIndex = (index: number) => {
@@ -66,13 +83,23 @@ export default function Create() {
   const addIngredientGroupCard = () => {
     const newIngredientGroup: IngredientGroupCard = {
       title: "",
+      index: ingredientGroupIndex,
     };
+    setingredientGroupIndex(ingredientGroupIndex + 1);
     setIngredientGroupCards([...ingredientGroupCards, newIngredientGroup]);
   };
 
+  const removeIngredientGroupByIndex = (index: number) => {
+    console.log("Index to remove", index);
+
+    setIngredientGroupCards((prevSteps) =>
+      prevSteps.filter((_, i) => i !== index)
+    );
+  };
+
   return (
-    <div className="max-w-[1200px] w-full mx-auto px-5">
-      <button className="flex gap-1">
+    <Form action={formAction} className="max-w-[1200px] w-full mx-auto px-5">
+      <Button type="button" className="flex gap-1">
         <Image src={chevron} alt="logo" width={20} height={20} />
         <Link
           href="/"
@@ -81,10 +108,17 @@ export default function Create() {
         >
           Back
         </Link>
-      </button>
+      </Button>
       <div className="text-center">
-        <h1 className="text-[40px] font-ptSerif text-title">New recipe</h1>
-        <p className="text-2xl font-inter text-body">Add folder</p>
+        <TextField name="recipeName">
+          <Input
+            placeholder="New recipe"
+            className="text-[40px] rounded-lg font-ptSerif text-center text-title bg-transparent border border-dashed border-title p-2"
+          ></Input>
+        </TextField>
+        <Button type="button" className="text-2xl font-inter text-body">
+          Add folder
+        </Button>
       </div>
 
       <h2 className="text-[32px] font-ptSerif text-title pt-12">Ingredients</h2>
@@ -92,13 +126,19 @@ export default function Create() {
       <PeopleCalculatorCreate people={undefined} />
 
       <div className="pt-4 flex flex-wrap gap-10">
-        <CardIngredientCreate title="" />
-        {ingredientGroupCards.map((ingredientGroupCards, index) => (
-          <CardIngredientCreate key={index} title={""} />
+        {ingredientGroupCards.map((ingredientGroupCard, index) => (
+          <CardIngredientCreate
+            removeIngredientGroup={removeIngredientGroupByIndex}
+            key={index}
+            index={index}
+            title={ingredientGroupCard.title}
+            setTitle={updateIngredientGroupTitle}
+          />
         ))}
 
-        <div className="relative">
-          <button
+        <div className="relative flex max-h-[130px]">
+          <Button
+            type="button"
             onClick={() => addIngredientGroupCard()}
             className="flex flex-col gap-4 items-center border z-20 relative border-title rounded-lg p-5 bg-[url(/noisy-texture-200x200.png)] w-full bg-background bg-repeat bg-size-[200px_200px]"
           >
@@ -106,7 +146,7 @@ export default function Create() {
               Add a new ingredient group
             </p>
             <Image src={add} alt="logo" width={40} height={40} />
-          </button>
+          </Button>
           <div className="border z-10 absolute top-1 left-1 transition-all w-full h-full border-title rounded-[8px] p-3"></div>
         </div>
       </div>
@@ -125,6 +165,7 @@ export default function Create() {
               </div>
 
               <Input
+                name={`step[${index}].description`}
                 value={stepCard.description}
                 onChange={(e) => updateStepDescription(index, e.target.value)}
                 placeholder="Step instructions"
@@ -133,6 +174,7 @@ export default function Create() {
               />
             </div>
             <Button
+              type="button"
               className="flex items-center justify-center absolute -top-2 -right-2 w-[30px] h-[30px] font-inter bg-background border border-title text-title rounded-full"
               onClick={() => removeStepByIndex(index)}
             >
@@ -143,7 +185,8 @@ export default function Create() {
       </div>
 
       <div className="relative mt-10">
-        <button
+        <Button
+          type="button"
           onClick={() => addStep()}
           className="flex border z-20 relative gap-4 items-center z-20 border-title rounded-lg p-5 bg-[url(/noisy-texture-200x200.png)] w-full bg-background bg-repeat bg-size-[200px_200px]"
         >
@@ -151,13 +194,16 @@ export default function Create() {
           <p className="font-inter text-base font-bold text-title">
             Add a new Step
           </p>
-        </button>
+        </Button>
         <div className="border z-10 absolute top-1 left-1 transition-all w-full h-full border-title rounded-[8px] p-3"></div>
       </div>
 
-      <button className="bg-pastelYellow mt-10 text-title rounded-xl px-8 py-4 font-inter font-bold border-2 border-title transition hover:drop-shadow-[4px_4px_0px]">
+      <Button
+        type="submit"
+        className="bg-pastelYellow mt-10 text-title rounded-xl px-8 py-4 font-inter font-bold border-2 border-title transition hover:drop-shadow-[4px_4px_0px]"
+      >
         Save
-      </button>
-    </div>
+      </Button>
+    </Form>
   );
 }
