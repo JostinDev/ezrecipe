@@ -1,4 +1,4 @@
-import "server-only";
+"use server";
 
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
@@ -71,4 +71,18 @@ export async function getRecipeById(recipeId: number) {
   }
 
   return recipe;
+}
+
+export async function getUserFolders() {
+  const { userId, redirectToSignIn } = await auth();
+  if (!userId) return redirectToSignIn();
+
+  return await db.query.folder.findMany({
+    where: eq(schema.folder.userID, userId),
+    columns: {
+      id: true,
+      name: true,
+      userID: false,
+    },
+  });
 }

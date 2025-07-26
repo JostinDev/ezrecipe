@@ -18,7 +18,7 @@ export const unitEnum = pgEnum("metric_system_units", [
   "mg",
   "tsp",
   "tbsp",
-  "unit"
+  "unit",
 ]);
 
 /*********** FOLDER ***********/
@@ -26,6 +26,7 @@ export const unitEnum = pgEnum("metric_system_units", [
 export const folder = pgTable("folder", {
   id: serial("id").primaryKey(),
   name: varchar({ length: 256 }).notNull(),
+  userID: varchar("user_id", { length: 256 }).notNull(),
 });
 
 export type Folder = typeof folder.$inferSelect;
