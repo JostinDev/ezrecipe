@@ -9,7 +9,7 @@ export default async function AppLayout({ children }: RootLayoutProps) {
   return (
     <div>
       <Header />
-      <div className="px-4 mt-24">{children}</div>
+      <div className="px-4 mt-10 md:mt-24">{children}</div>
     </div>
   );
 }
