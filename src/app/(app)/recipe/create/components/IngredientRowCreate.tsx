@@ -106,7 +106,7 @@ export default function IngredientRowCreate({
         >
           <TextField
             name={`ingredientRow[${ingredientGroup}][${index}].amount`}
-            className="max-w-20"
+            className="w-[140px]"
           >
             <Input
               onChange={(e) =>
@@ -114,7 +114,7 @@ export default function IngredientRowCreate({
               }
               inputMode="numeric"
               className="h-10 rounded-md border w-full bg-transparent border-dashed border-titleBlue p-2"
-              placeholder="Amout"
+              placeholder="Amount"
             ></Input>
           </TextField>
           <TextField className="w-[70px]">
@@ -149,6 +149,7 @@ export default function IngredientRowCreate({
           </TextField>
           <TextField
             name={`ingredientRow[${ingredientGroup}][${index}].ingredient`}
+            className="w-full"
           >
             <Input
               onChange={(e) =>

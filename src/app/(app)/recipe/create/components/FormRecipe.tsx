@@ -26,7 +26,10 @@ export default function FormRecipe({ folders }: FormRecipeProps) {
   });
 
   return (
-    <Form action={formAction} className="max-w-[1200px] w-full mx-auto px-5">
+    <Form
+      action={formAction}
+      className="max-w-[1200px] w-full mx-auto px-2 lg:px-5 pb-10"
+    >
       <BackToHomeButton />
       <FormRecipeTitle formError={state.errors?.recipeName} />
       <FolderSelector folders={folders} />

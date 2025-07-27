@@ -57,7 +57,7 @@ export default function CardIngredientCreate() {
       {ingredientGroupCards.map((ingredientGroupCard, index) => (
         <div
           key={ingredientGroupCard.index}
-          className="flex flex-col bg-pastelBlue text-titleBlue rounded-lg p-5 max-w-[400px] w-full transition drop-shadow-[4px_4px_0px]"
+          className="flex relative w-full  flex-col bg-pastelBlue text-titleBlue rounded-lg p-5 sm:max-w-[400px] w-full transition drop-shadow-[4px_4px_0px]"
         >
           <TextField>
             <Input
@@ -68,7 +68,7 @@ export default function CardIngredientCreate() {
               }
               placeholder="Ingredient group title"
               disabled={false}
-              className="h-10 rounded-md border font-bold bg-transparent border-dashed border-titleBlue p-2"
+              className="h-10 w-full rounded-md border font-bold bg-transparent border-dashed border-titleBlue p-2"
             />
           </TextField>
 
@@ -84,7 +84,7 @@ export default function CardIngredientCreate() {
         </div>
       ))}
 
-      <div className="relative flex max-h-[130px]">
+      <div className="relative flex w-full sm:w-auto max-h-[130px]">
         <Button
           type="button"
           onClick={() => addIngredientGroupCard()}
