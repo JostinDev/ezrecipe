@@ -1,10 +1,15 @@
-import { Button, Input, TextField } from "react-aria-components";
+import { Button, FieldError, Input, TextField } from "react-aria-components";
 import cross from "@/app/(app)/img/cross.svg";
 import add from "@/app/(app)/img/plus_button.svg";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-export default function FormStep() {
+type FormStepsProps = {
+  formError: string[] | undefined;
+};
+
+export default function FormStep({ formError }: FormStepsProps) {
+  console.log(formError);
   type StepCard = {
     description: string;
     index: number;
@@ -44,13 +49,19 @@ export default function FormStep() {
 
     setStepCards((prevSteps) => prevSteps.filter((_, i) => i !== index));
   };
+
+  useEffect(() => {
+    console.log(formError);
+  }, [formError]);
+
   return (
     <div>
       <div className="pt-4 flex flex-col gap-10">
         {stepCards.map((stepCard, index) => (
           <TextField
+            isRequired
             key={index}
-            className="flex relative bg-pastelBlue text-titleBlue rounded-lg p-5 w-full transition drop-shadow-[4px_4px_0px]"
+            className="flex flex-col relative bg-pastelBlue text-titleBlue rounded-lg p-5 w-full transition drop-shadow-[4px_4px_0px]"
           >
             <div className="flex gap-4 items-center w-full">
               <div className="text-titleBlue flex justify-center items-center font-inter text-base font-bold rounded-full border border-titleBlue p-4 w-10 h-10">
@@ -73,6 +84,12 @@ export default function FormStep() {
             >
               <Image src={cross} alt="logo" width={24} height={24} />
             </Button>
+            <div className="ml-[56px]">
+              <FieldError className="font-inter text-sm text-error" />
+              <span className="font-inter text-sm text-error">
+                {formError?.[index]}
+              </span>
+            </div>
           </TextField>
         ))}
       </div>

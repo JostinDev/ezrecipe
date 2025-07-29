@@ -11,8 +11,12 @@ export default function FormRecipeTitle({ formError }: FormRecipeTitleProps) {
           placeholder="New recipe"
           className="text-[40px] w-full max-w-[400px] rounded-lg font-ptSerif text-center text-title bg-transparent border border-dashed border-title p-2"
         ></Input>
-        <FieldError />
-        <p>{formError?.[0]}</p>
+        <div className="mt-2">
+          <FieldError className="font-inter text-base text-error" />
+          <span className="font-inter text-base text-error">
+            {formError?.[0]}
+          </span>
+        </div>
       </TextField>
     </div>
   );

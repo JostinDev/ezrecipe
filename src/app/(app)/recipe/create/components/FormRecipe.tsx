@@ -21,6 +21,7 @@ type FormRecipeProps = {
 };
 
 export default function FormRecipe({ folders }: FormRecipeProps) {
+  // @ts-expect-error return type not compatible with expandable form. TODO: look into this
   const [state, formAction, isPending] = useActionState(createRecipe, {
     errors: {},
   });
@@ -37,7 +38,7 @@ export default function FormRecipe({ folders }: FormRecipeProps) {
       <PeopleCalculatorCreate people={undefined} />
       <CardIngredientCreate />
       <h2 className="text-[32px] font-ptSerif text-title pt-12">Steps</h2>
-      <FormStep />
+      <FormStep formError={state.errors?.steps} />
       <FormSubmitButton isFormPending={isPending} />
     </Form>
   );

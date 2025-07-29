@@ -6,7 +6,10 @@ import { db } from "@/server/db";
 import * as schema from "@/server/db/schema";
 
 const formSchema = z.object({
-  recipeName: z.coerce.string().min(1, "Recipe name is required").max(256),
+  recipeName: z.coerce
+    .string()
+    .min(1, "Recipe name is required")
+    .max(256, "The title is too long"),
   peopleNumber: z.coerce.number().min(1, "Must be at least 1 person"),
   selectedFolder: z.coerce
     .number()
@@ -17,7 +20,10 @@ const formSchema = z.object({
   steps: z
     .array(
       z.object({
-        description: z.string().min(1, "Step description is required"),
+        description: z
+          .string()
+          .min(1, "Step description is required")
+          .max(2000, "Step description is too long"),
       })
     )
     .min(1, "At least one step is required"),
@@ -147,7 +153,40 @@ export async function createRecipe(prevState: any, formData: FormData) {
   if (!validation.success) {
     console.log(validation.error);
 
-    return { errors: validation.error.flatten().fieldErrors };
+    const formated = z.formatError(validation.error);
+
+    console.log("FOOORMAMAAMAM", formated);
+    console.log("FOOORMAMAAMAM", formated.recipeName?._errors);
+
+    let stepErrors: string[] = [];
+    const titleError: string[] = [];
+
+    if (formated.steps) {
+      const stepKeys = Object.keys(formated.steps).filter(
+        (key): key is `${number}` => !isNaN(Number(key))
+      );
+      const stepCount = stepKeys.length;
+
+      stepErrors = Array(stepCount).fill("");
+
+      for (const key of stepKeys) {
+        stepErrors[key] = formated.steps[0].description?._errors[0] ?? "";
+      }
+    }
+
+    if (formated.recipeName) {
+      titleError[0] = formated.recipeName?._errors[0];
+    }
+
+    return {
+      errors: {
+        recipeName: titleError,
+        peopleNumber: [""],
+        selectedFolder: [""],
+        steps: stepErrors,
+        ingredientGroups: [""],
+      },
+    };
   }
 
   const { recipeName, peopleNumber, selectedFolder, steps, ingredientGroups } =

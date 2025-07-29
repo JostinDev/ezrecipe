@@ -1,3 +1,4 @@
+import { error } from "console";
 import type { Config } from "tailwindcss";
 import defaultTheme from "tailwindcss/defaultTheme";
 
@@ -22,6 +23,7 @@ export default {
         body: "#626158",
         shadow: "#343638",
         placeholder: "#AEAD9F",
+        error: "#FF0000",
       },
       dropShadow: {
         base: "4px 4px 0 #343638",
