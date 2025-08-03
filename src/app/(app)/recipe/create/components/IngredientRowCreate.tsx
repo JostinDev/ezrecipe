@@ -105,6 +105,7 @@ export default function IngredientRowCreate({
           className="flex relative flex-row w-full gap-2 text-titleBlue font-inter text-base"
         >
           <TextField
+            isRequired
             name={`ingredientRow[${ingredientGroup}][${index}].amount`}
             className="w-[140px]"
           >
@@ -119,6 +120,8 @@ export default function IngredientRowCreate({
           </TextField>
           <TextField className="w-[70px]">
             <Select
+              defaultSelectedKey={"unit"}
+              isRequired
               name={`ingredientRow[${ingredientGroup}][${index}].unit`}
               onSelectionChange={(value) => {
                 if (typeof value === "string") {
@@ -126,7 +129,7 @@ export default function IngredientRowCreate({
                 }
               }}
               placeholder="Unit"
-              className="h-10 rounded-md w-full border bg-transparent border-dashed border-titleBlue"
+              className="h-10 w-[70px] rounded-md border bg-transparent border-dashed border-titleBlue"
             >
               <Button className="flex justify-between w-full p-2">
                 <SelectValue />
@@ -148,6 +151,7 @@ export default function IngredientRowCreate({
             </Select>
           </TextField>
           <TextField
+            isRequired
             name={`ingredientRow[${ingredientGroup}][${index}].ingredient`}
             className="w-full"
           >
