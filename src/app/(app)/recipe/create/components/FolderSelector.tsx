@@ -22,6 +22,8 @@ export default function FolderSelector({ folders }: CardStepCreateProps) {
   return (
     <TextField className="flex justify-center mt-5">
       <Select
+        selectedKey={-1}
+        isRequired
         name="selectedFolder"
         placeholder="Add folder"
         className="text-2xl font-inter text-body rounded-md border bg-transparent border-dashed border-titleBlue"
@@ -35,6 +37,7 @@ export default function FolderSelector({ folders }: CardStepCreateProps) {
           <ListBox className="bg-background border border-title rounded-lg p-2">
             <ListBoxItem
               id={-1}
+              key={-1}
               className="cursor-pointer p-0.5 hover:font-bold data-[selected=true]:font-bold transition-all"
             >
               No folder
