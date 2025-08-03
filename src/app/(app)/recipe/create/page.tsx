@@ -1,5 +1,5 @@
 "use server";
-import FormRecipe from "./components/FormRecipe";
+import FormRecipe from "./components/FormRecipeWrapper";
 
 import { getUserFolders } from "@/server/queries";
 

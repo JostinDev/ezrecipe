@@ -1,13 +1,27 @@
 "use client";
 
-import { Button, Input, TextField } from "react-aria-components";
+import { Button, FieldError, Input, TextField } from "react-aria-components";
 import IngredientRowCreate from "./IngredientRowCreate";
 import Image from "next/image";
 import cross from "@/app/(app)/img/cross.svg";
 import add from "@/app/(app)/img/plus_button.svg";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-export default function CardIngredientCreate() {
+type GroupError = {
+  title?: string;
+  ingredients?: {
+    amount?: string;
+    ingredient?: string;
+  }[];
+};
+
+type FormCardIngredientProps = {
+  formError: Record<number, GroupError> | undefined;
+};
+
+export default function FormCardIngredient({
+  formError,
+}: FormCardIngredientProps) {
   type IngredientGroupCard = {
     title: string;
     index: number;
@@ -31,10 +45,6 @@ export default function CardIngredientCreate() {
     );
   };
 
-  useEffect(() => {
-    console.log(ingredientGroupCards);
-  }, [ingredientGroupCards]);
-
   const addIngredientGroupCard = () => {
     const newIngredientGroup: IngredientGroupCard = {
       title: "",
@@ -45,8 +55,6 @@ export default function CardIngredientCreate() {
   };
 
   const removeIngredientGroup = (index: number) => {
-    console.log("Index to remove", index);
-
     setIngredientGroupCards((prevSteps) =>
       prevSteps.filter((_, i) => i !== index)
     );
@@ -59,7 +67,7 @@ export default function CardIngredientCreate() {
           key={ingredientGroupCard.index}
           className="flex relative w-full  flex-col bg-pastelBlue text-titleBlue rounded-lg p-5 sm:max-w-[400px] w-full transition drop-shadow-[4px_4px_0px]"
         >
-          <TextField>
+          <TextField isRequired>
             <Input
               name={`ingredientGroup[${index}].title`}
               value={ingredientGroupCard.title}
@@ -70,6 +78,10 @@ export default function CardIngredientCreate() {
               disabled={false}
               className="h-10 w-full rounded-md border font-bold bg-transparent border-dashed border-titleBlue p-2"
             />
+            <FieldError className="font-inter text-sm text-error" />
+            <span className="font-inter text-sm text-error">
+              {formError?.[index]?.title}
+            </span>
           </TextField>
 
           <div className="flex mt-4 w-full flex-col gap-3">

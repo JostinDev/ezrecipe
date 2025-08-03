@@ -9,7 +9,7 @@ const formSchema = z.object({
   recipeName: z.coerce
     .string()
     .min(1, "Recipe name is required")
-    .max(256, "The title is too long"),
+    .max(256, "Recipe name is too long"),
   peopleNumber: z.coerce.number().min(1, "Must be at least 1 person"),
   selectedFolder: z.coerce
     .number()
@@ -20,10 +20,7 @@ const formSchema = z.object({
   steps: z
     .array(
       z.object({
-        description: z
-          .string()
-          .min(1, "Step description is required")
-          .max(2000, "Step description is too long"),
+        description: z.string().min(1, "Required").max(2000, "Too long"),
       })
     )
     .min(1, "At least one step is required"),
@@ -31,7 +28,7 @@ const formSchema = z.object({
   ingredientGroups: z
     .array(
       z.object({
-        title: z.string().min(1, "Group title is required"),
+        title: z.string().min(1, "Required").max(256, "Too long"),
         ingredients: z
           .array(
             z.object({
@@ -178,13 +175,60 @@ export async function createRecipe(prevState: any, formData: FormData) {
       titleError[0] = formated.recipeName?._errors[0];
     }
 
+    type GroupError = {
+      title?: string;
+      ingredients?: {
+        amount?: string;
+        ingredient?: string;
+      }[];
+    };
+    const groupErrors: Record<number, GroupError> = {};
+
+    if (formated.ingredientGroups) {
+      const ingredientGroupKeys = Object.keys(formated.ingredientGroups).filter(
+        (key): key is `${number}` => !isNaN(Number(key))
+      );
+
+      for (const key of ingredientGroupKeys) {
+        const idx = Number(key);
+        const group = formated.ingredientGroups[idx];
+
+        console.log("Ingredients: ", group);
+
+        const titleError = group?.title?._errors?.[0];
+
+        // build ingredient errors array if present
+        let ingredientsErrors: GroupError["ingredients"] = undefined;
+        if (group?.ingredients) {
+          const ingredientKeys = Object.keys(group.ingredients).filter(
+            (k): k is `${number}` => !isNaN(Number(k))
+          );
+
+          if (ingredientKeys.length > 0) {
+            ingredientsErrors = ingredientKeys.map((ingKey) => {
+              const ing = group.ingredients?.[Number(ingKey)];
+              return {
+                amount: ing?.amount?._errors?.[0],
+                ingredient: ing?.ingredient?._errors?.[0],
+              };
+            });
+          }
+        }
+
+        groupErrors[idx] = {
+          ...(titleError ? { title: titleError } : {}),
+          ...(ingredientsErrors ? { ingredients: ingredientsErrors } : {}),
+        };
+      }
+    }
+
     return {
       errors: {
         recipeName: titleError,
         peopleNumber: [""],
         selectedFolder: [""],
         steps: stepErrors,
-        ingredientGroups: [""],
+        ingredientGroups: groupErrors,
       },
     };
   }

@@ -1,7 +1,7 @@
 "use client";
 
 import PeopleCalculatorCreate from "./PeopleCalculatorCreate";
-import CardIngredientCreate from "./CardIngredientCreate";
+import CardIngredientCreate from "./FormCardIngredient";
 import { useActionState } from "react";
 import { Form } from "react-aria-components";
 import { createRecipe } from "@/server/mutations";
@@ -36,7 +36,7 @@ export default function FormRecipe({ folders }: FormRecipeProps) {
       <FolderSelector folders={folders} />
       <h2 className="text-[32px] font-ptSerif text-title pt-12">Ingredients</h2>
       <PeopleCalculatorCreate people={undefined} />
-      <CardIngredientCreate />
+      <CardIngredientCreate formError={state.errors?.ingredientGroups} />
       <h2 className="text-[32px] font-ptSerif text-title pt-12">Steps</h2>
       <FormStep formError={state.errors?.steps} />
       <FormSubmitButton isFormPending={isPending} />
