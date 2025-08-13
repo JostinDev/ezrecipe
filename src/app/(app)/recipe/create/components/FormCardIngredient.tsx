@@ -12,7 +12,7 @@ type GroupError = {
   ingredients?: {
     amount?: string;
     ingredient?: string;
-  }[];
+  };
 };
 
 type FormCardIngredientProps = {
