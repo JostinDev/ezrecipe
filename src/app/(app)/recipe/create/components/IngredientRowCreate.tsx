@@ -17,7 +17,7 @@ import Image from "next/image";
 
 type IngredientRowProps = {
   ingredientGroup: number;
-  formError: { amount?: string; ingredient?: string } | undefined;
+  formError: { amount?: string; ingredient?: string }[] | undefined;
 };
 
 export default function IngredientRowCreate({ ingredientGroup, formError }: IngredientRowProps) {

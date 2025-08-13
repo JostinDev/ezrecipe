@@ -12,7 +12,7 @@ type GroupError = {
   ingredients?: {
     amount?: string;
     ingredient?: string;
-  };
+  }[];
 };
 
 type FormCardIngredientProps = {
@@ -25,7 +25,7 @@ export default function FormCardIngredient({ formError }: FormCardIngredientProp
     index: number;
   };
 
-  const [ingredientGroupIndex, setingredientGroupIndex] = useState(1);
+  const [ingredientGroupIndex, setIngredientGroupIndex] = useState(1);
   const [ingredientGroupCards, setIngredientGroupCards] = useState<IngredientGroupCard[]>([
     {
       title: "",
@@ -46,7 +46,7 @@ export default function FormCardIngredient({ formError }: FormCardIngredientProp
       title: "",
       index: ingredientGroupIndex,
     };
-    setingredientGroupIndex(ingredientGroupIndex + 1);
+    setIngredientGroupIndex(ingredientGroupIndex + 1);
     setIngredientGroupCards([...ingredientGroupCards, newIngredientGroup]);
   };
 

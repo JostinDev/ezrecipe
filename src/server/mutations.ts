@@ -33,9 +33,11 @@ const formSchema = z.object({
         ingredients: z
           .array(
             z.object({
-              amount: z.coerce.number("Must be a number").min(0.01, "Required"),
+              amount: z.coerce
+                .number("The field amount must be a number")
+                .min(0.01, "The field amount is required"),
               unit: z.enum(["l", "dl", "cl", "ml", "kg", "g", "mg", "tsp", "tbsp", "unit"]),
-              ingredient: z.string().min(1, "Required").max(256, "Too long"),
+              ingredient: z.string().min(1, "Required").max(256, "The ingredient is too long"),
             }),
           )
           .min(1, "At least one ingredient is required"),
@@ -131,7 +133,7 @@ export async function createRecipe(prevState: any, formData: FormData) {
   const parsed = parseFormData(formData);
   const validation = formSchema.safeParse(parsed);
   if (!validation.success) {
-    type GroupError = {
+    type GroupErrorArray = {
       title?: string;
       ingredients?: {
         amount?: string;
@@ -143,7 +145,7 @@ export async function createRecipe(prevState: any, formData: FormData) {
 
     let stepErrors: string[] = [];
     const titleError: string[] = [];
-    const groupErrors: Record<number, GroupError> = {};
+    const groupErrors: Record<number, GroupErrorArray> = {};
 
     // STEPS
     if (formated.steps) {
@@ -193,8 +195,12 @@ export async function createRecipe(prevState: any, formData: FormData) {
           if (ingredientKeys.length > 0) {
             ingredientKeys.forEach((key) => {
               const ing = group.ingredients?.[Number(key)];
-              ingredientsArray[key].amount = ing?.amount?._errors?.[0];
-              ingredientsArray[key].ingredient = ing?.ingredient?._errors?.[0];
+              if (ing?.amount?._errors?.[0]) {
+                ingredientsArray[key].amount = ing?.amount?._errors?.[0];
+              }
+              if (ing?.ingredient?._errors?.[0]) {
+                ingredientsArray[key].ingredient = ing?.ingredient?._errors?.[0];
+              }
             });
           }
         }
