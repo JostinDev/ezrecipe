@@ -6,7 +6,6 @@ import {db} from "@/server/db";
 import * as schema from "@/server/db/schema";
 import {redirect} from 'next/navigation';
 
-
 const formSchema = z.object({
     recipeName: z.coerce
         .string()
@@ -60,7 +59,7 @@ function parseFormData(formData: FormData) {
 
     // Parse steps
     for (const [key, value] of formData.entries()) {
-        const match = key.match(/^step\[(\d+)\.description$/);
+        const match = key.match(/^step\[(\d+)\]\.description$/);
         if (match) {
             const index = parseInt(match[1]);
             steps[index] = {description: value as string};
@@ -80,12 +79,12 @@ function parseFormData(formData: FormData) {
     > = {};
 
     for (const [key, value] of formData.entries()) {
-        const groupMatch = key.match(/^ingredientGroup\[(\d+)\.title$/);
+        const groupMatch = key.match(/^ingredientGroup\[(\d+)\]\.title$/);
         if (groupMatch) {
             groupTitles[+groupMatch[1]] = value as string;
         }
 
-        const rowMatch = key.match(/^ingredientRow\[(\d+)\[(\d+)\.(amount|unit|ingredient)$/);
+        const rowMatch = key.match(/^ingredientRow\[(\d+)\]\[(\d+)\]\.(amount|unit|ingredient)$/);
         if (rowMatch) {
             const groupIndex = +rowMatch[1];
             const rowIndex = +rowMatch[2];
