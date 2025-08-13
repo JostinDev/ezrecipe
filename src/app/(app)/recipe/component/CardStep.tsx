@@ -3,14 +3,11 @@ type CardStepProps = {
   stepIndex: number;
 };
 
-export default function CardStep({
-  stepDescription,
-  stepIndex,
-}: CardStepProps) {
+export default function CardStep({ stepDescription, stepIndex }: CardStepProps) {
   return (
-    <div className="flex bg-pastelBlue text-titleBlue rounded-lg p-5 w-full transition drop-shadow-[4px_4px_0px]">
-      <div className="flex gap-4 items-center">
-        <div className="text-titleBlue flex justify-center items-center font-inter text-base font-bold rounded-full border border-titleBlue p-4 w-10 h-10">
+    <div className="flex w-full rounded-lg bg-pastelBlue p-5 text-titleBlue drop-shadow-[4px_4px_0px] transition">
+      <div className="flex items-center gap-4">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full border border-titleBlue p-4 font-inter text-base font-bold text-titleBlue">
           {stepIndex + 1}
         </div>
         <p className="font-inter text-base text-titleBlue">{stepDescription}</p>

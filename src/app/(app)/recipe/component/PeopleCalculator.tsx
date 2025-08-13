@@ -8,10 +8,7 @@ type PeopleCalculatorProps = {
   onSetPeopleNumber: (num: number) => void;
 };
 
-export default function PeopleCalculator({
-  people,
-  onSetPeopleNumber,
-}: PeopleCalculatorProps) {
+export default function PeopleCalculator({ people, onSetPeopleNumber }: PeopleCalculatorProps) {
   function handlePeopleCounter(newValue: number) {
     if (newValue <= 0 || newValue > 10) {
       return;
@@ -20,22 +17,20 @@ export default function PeopleCalculator({
   }
 
   return (
-    <div className="flex gap-2 items-center mt-2">
+    <div className="mt-2 flex items-center gap-2">
       <Image src={user} alt="logo" width={24} height={24} />
 
       <button
         onClick={() => handlePeopleCounter(people - 1)}
-        className="text-body flex text-2xl justify-center items-center font-inter rounded-full border border-body p-4 w-8 h-8"
+        className="flex h-8 w-8 items-center justify-center rounded-full border border-body p-4 font-inter text-2xl text-body"
       >
         -
       </button>
-      <p className="text-body font-inter text-base text-xl w-5 text-center">
-        {people}
-      </p>
+      <p className="w-5 text-center font-inter text-base text-xl text-body">{people}</p>
 
       <button
         onClick={() => handlePeopleCounter(people + 1)}
-        className="text-body flex text-2xl justify-center items-center font-inter rounded-full border border-body p-4 w-8 h-8"
+        className="flex h-8 w-8 items-center justify-center rounded-full border border-body p-4 font-inter text-2xl text-body"
       >
         +
       </button>

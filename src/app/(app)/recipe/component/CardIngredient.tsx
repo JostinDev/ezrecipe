@@ -16,13 +16,11 @@ export default function CardIngredient({
   basePeopleNumber,
 }: CardIngredientProps) {
   return (
-    <div className="flex flex-col bg-pastelBlue text-titleBlue rounded-lg p-5 max-w-[300px] w-full transition drop-shadow-[4px_4px_0px]">
-      <p className="font-inter text-base text-titleBlue font-bold mb-4 ">
-        {ingredientGroupTitle}
-      </p>
+    <div className="flex w-full max-w-[300px] flex-col rounded-lg bg-pastelBlue p-5 text-titleBlue drop-shadow-[4px_4px_0px] transition">
+      <p className="mb-4 font-inter text-base font-bold text-titleBlue">{ingredientGroupTitle}</p>
       <div className="flex flex-col gap-2">
         {ingredients.map((ingredient) => (
-          <div key={ingredient.id} className="flex gap-2 items-center">
+          <div key={ingredient.id} className="flex items-center gap-2">
             <IngredientRow
               amount={Number(ingredient.quantity)}
               unit={ingredient.unit}

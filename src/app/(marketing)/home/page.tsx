@@ -5,11 +5,11 @@ import SignInLandingPageButton from "./SignInLandingPageButton";
 export default function Home() {
   return (
     <div className="container mx-auto px-5">
-      <div className="flex items-center flex-col justify-center h-screen">
-        <h1 className="md:text-7xl sm:text-6xl text-5xl mb-8 text-center font-ptSerif font-bold text-title">
+      <div className="flex h-screen flex-col items-center justify-center">
+        <h1 className="mb-8 text-center font-ptSerif text-5xl font-bold text-title sm:text-6xl md:text-7xl">
           Welcome to ezrecipe
         </h1>
-        <h2 className="md:text-3xl sm:text-2xl text-xl text-center font-inter text-body">
+        <h2 className="text-center font-inter text-xl text-body sm:text-2xl md:text-3xl">
           Your no-bullshit recipes saver
         </h2>
         <ClerkProvider>

@@ -18,10 +18,8 @@ export async function getRecipes() {
   });
 
   const recipesWithoutFolder: typeof recipes = [];
-  const foldersMap: Map<
-    string,
-    { folderName: string; folderId: number; count: number }
-  > = new Map();
+  const foldersMap: Map<string, { folderName: string; folderId: number; count: number }> =
+    new Map();
 
   for (const recipe of recipes) {
     if (recipe.folder) {
@@ -53,8 +51,7 @@ export async function getRecipeById(recipeId: number) {
   if (!userId) return redirectToSignIn();
 
   const recipe = await db.query.recipe.findFirst({
-    where: (fields, { eq, and }) =>
-      and(eq(fields.id, recipeId), eq(fields.userID, userId)),
+    where: (fields, { eq, and }) => and(eq(fields.id, recipeId), eq(fields.userID, userId)),
     with: {
       folder: true,
       steps: true,

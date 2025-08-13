@@ -1,12 +1,5 @@
 import { relations } from "drizzle-orm";
-import {
-  integer,
-  pgTable,
-  varchar,
-  pgEnum,
-  serial,
-  numeric,
-} from "drizzle-orm/pg-core";
+import { integer, pgTable, varchar, pgEnum, serial, numeric } from "drizzle-orm/pg-core";
 
 export const unitEnum = pgEnum("metric_system_units", [
   "l",
@@ -87,16 +80,13 @@ export const ingredientGroup = pgTable("ingredient_group", {
 
 export type IngredientGroup = typeof ingredientGroup.$inferSelect;
 
-export const ingredientGroupRelations = relations(
-  ingredientGroup,
-  ({ one, many }) => ({
-    ingredients: many(ingredient),
-    recipe: one(recipe, {
-      fields: [ingredientGroup.recipeId],
-      references: [recipe.id],
-    }),
-  })
-);
+export const ingredientGroupRelations = relations(ingredientGroup, ({ one, many }) => ({
+  ingredients: many(ingredient),
+  recipe: one(recipe, {
+    fields: [ingredientGroup.recipeId],
+    references: [recipe.id],
+  }),
+}));
 
 /*********** INGREDIENT ***********/
 

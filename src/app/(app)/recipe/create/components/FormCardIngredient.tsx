@@ -19,18 +19,14 @@ type FormCardIngredientProps = {
   formError: Record<number, GroupError> | undefined;
 };
 
-export default function FormCardIngredient({
-  formError,
-}: FormCardIngredientProps) {
+export default function FormCardIngredient({ formError }: FormCardIngredientProps) {
   type IngredientGroupCard = {
     title: string;
     index: number;
   };
 
   const [ingredientGroupIndex, setingredientGroupIndex] = useState(1);
-  const [ingredientGroupCards, setIngredientGroupCards] = useState<
-    IngredientGroupCard[]
-  >([
+  const [ingredientGroupCards, setIngredientGroupCards] = useState<IngredientGroupCard[]>([
     {
       title: "",
       index: 0,
@@ -40,8 +36,8 @@ export default function FormCardIngredient({
   const updateIngredientGroupTitle = (index: number, newTitle: string) => {
     setIngredientGroupCards((prevIngredientGroup) =>
       prevIngredientGroup.map((ingredientGroup, i) =>
-        i === index ? { ...ingredientGroup, title: newTitle } : ingredientGroup
-      )
+        i === index ? { ...ingredientGroup, title: newTitle } : ingredientGroup,
+      ),
     );
   };
 
@@ -55,40 +51,37 @@ export default function FormCardIngredient({
   };
 
   const removeIngredientGroup = (index: number) => {
-    setIngredientGroupCards((prevSteps) =>
-      prevSteps.filter((_, i) => i !== index)
-    );
+    setIngredientGroupCards((prevSteps) => prevSteps.filter((_, i) => i !== index));
   };
 
   return (
-    <div className="flex gap-10 pt-4 flex-wrap">
+    <div className="flex flex-wrap gap-10 pt-4">
       {ingredientGroupCards.map((ingredientGroupCard, index) => (
         <div
           key={ingredientGroupCard.index}
-          className="flex relative w-full  flex-col bg-pastelBlue text-titleBlue rounded-lg p-5 sm:max-w-[400px] w-full transition drop-shadow-[4px_4px_0px]"
+          className="relative flex w-full flex-col rounded-lg bg-pastelBlue p-5 text-titleBlue drop-shadow-[4px_4px_0px] transition sm:max-w-[400px]"
         >
           <TextField isRequired>
             <Input
               name={`ingredientGroup[${index}].title`}
               value={ingredientGroupCard.title}
-              onChange={(e) =>
-                updateIngredientGroupTitle(index, e.target.value)
-              }
+              onChange={(e) => updateIngredientGroupTitle(index, e.target.value)}
               placeholder="Ingredient group title"
               disabled={false}
-              className="h-10 w-full rounded-md border font-bold bg-transparent border-dashed border-titleBlue p-2"
+              className="h-10 w-full rounded-md border border-dashed border-titleBlue bg-transparent p-2 font-bold"
             />
             <FieldError className="font-inter text-sm text-error" />
-            <span className="font-inter text-sm text-error">
-              {formError?.[index]?.title}
-            </span>
+            <span className="font-inter text-sm text-error">{formError?.[index]?.title}</span>
           </TextField>
 
-          <div className="flex mt-4 w-full flex-col gap-3">
-            <IngredientRowCreate ingredientGroup={index} />
+          <div className="mt-4 flex w-full flex-col gap-3">
+            <IngredientRowCreate
+              formError={formError?.[index].ingredients}
+              ingredientGroup={index}
+            />
           </div>
           <Button
-            className="flex items-center justify-center absolute -top-2 -right-2 w-[30px] h-[30px] font-inter bg-background border border-title text-title rounded-full"
+            className="absolute -right-2 -top-2 flex h-[30px] w-[30px] items-center justify-center rounded-full border border-title bg-background font-inter text-title"
             onClick={() => removeIngredientGroup(index)}
           >
             <Image src={cross} alt="logo" width={24} height={24} />
@@ -96,18 +89,16 @@ export default function FormCardIngredient({
         </div>
       ))}
 
-      <div className="relative flex w-full sm:w-auto max-h-[130px]">
+      <div className="relative flex max-h-[130px] w-full sm:w-auto">
         <Button
           type="button"
           onClick={() => addIngredientGroupCard()}
-          className="flex flex-col gap-4 items-center border z-20 relative border-title rounded-lg p-5 bg-[url(/noisy-texture-200x200.png)] w-full bg-background bg-repeat bg-size-[200px_200px]"
+          className="bg-size-[200px_200px] relative z-20 flex w-full flex-col items-center gap-4 rounded-lg border border-title bg-background bg-[url(/noisy-texture-200x200.png)] bg-repeat p-5"
         >
-          <p className="font-inter text-base font-bold text-title">
-            Add a new ingredient group
-          </p>
+          <p className="font-inter text-base font-bold text-title">Add a new ingredient group</p>
           <Image src={add} alt="logo" width={40} height={40} />
         </Button>
-        <div className="border z-10 absolute top-1 left-1 transition-all w-full h-full border-title rounded-[8px] p-3"></div>
+        <div className="absolute left-1 top-1 z-10 h-full w-full rounded-[8px] border border-title p-3 transition-all"></div>
       </div>
     </div>
   );

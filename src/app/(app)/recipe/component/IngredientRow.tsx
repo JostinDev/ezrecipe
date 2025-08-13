@@ -1,16 +1,6 @@
 "use client";
 
-type Unit =
-  | "l"
-  | "dl"
-  | "cl"
-  | "ml"
-  | "kg"
-  | "g"
-  | "mg"
-  | "tsp"
-  | "tbsp"
-  | "unit";
+type Unit = "l" | "dl" | "cl" | "ml" | "kg" | "g" | "mg" | "tsp" | "tbsp" | "unit";
 
 type CardIngredientProps = {
   amount: number;
@@ -31,7 +21,7 @@ export default function IngredientRow({
     amount: number,
     unit: Unit,
     originalPeople: number,
-    newPeople: number
+    newPeople: number,
   ): { amount: number; unit: Unit } {
     const scale = newPeople / originalPeople;
     let scaledAmount = amount * scale;
@@ -109,15 +99,10 @@ export default function IngredientRow({
     }
   }
 
-  const scaled = scaleAndConvertIngredient(
-    amount,
-    unit,
-    basePeopleNumber,
-    peopleNumber
-  );
+  const scaled = scaleAndConvertIngredient(amount, unit, basePeopleNumber, peopleNumber);
 
   return (
-    <p className="text-titleBlue font-inter text-base">
+    <p className="font-inter text-base text-titleBlue">
       {scaled.amount + scaled.unit + " " + description}
     </p>
   );

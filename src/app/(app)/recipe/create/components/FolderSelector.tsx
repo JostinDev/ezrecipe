@@ -20,32 +20,32 @@ type CardStepCreateProps = {
 
 export default function FolderSelector({ folders }: CardStepCreateProps) {
   return (
-    <TextField className="flex justify-center mt-5">
+    <TextField className="mt-5 flex justify-center">
       <Select
         selectedKey={-1}
         isRequired
         name="selectedFolder"
         placeholder="Add folder"
-        className="text-2xl font-inter text-body rounded-md border bg-transparent border-dashed border-titleBlue"
+        className="rounded-md border border-dashed border-titleBlue bg-transparent font-inter text-2xl text-body"
       >
-        <Button className="flex justify-between w-full p-2">
+        <Button className="flex w-full justify-between p-2">
           <SelectValue />
           <span aria-hidden="true">▼</span>
         </Button>
 
         <Popover>
-          <ListBox className="bg-background border border-title rounded-lg p-2">
+          <ListBox className="rounded-lg border border-title bg-background p-2">
             <ListBoxItem
               id={-1}
               key={-1}
-              className="cursor-pointer p-0.5 hover:font-bold data-[selected=true]:font-bold transition-all"
+              className="cursor-pointer p-0.5 transition-all hover:font-bold data-[selected=true]:font-bold"
             >
               No folder
             </ListBoxItem>
             {folders.map((option) => (
               <ListBoxItem
                 id={option.id}
-                className="cursor-pointer p-0.5 hover:font-bold data-[selected=true]:font-bold transition-all"
+                className="cursor-pointer p-0.5 transition-all hover:font-bold data-[selected=true]:font-bold"
                 key={option.id}
               >
                 {option.name}

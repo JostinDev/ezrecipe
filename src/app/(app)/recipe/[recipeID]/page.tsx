@@ -15,20 +15,16 @@ export default async function Recipe({ params }: RecipeProps) {
   const recipe = await getRecipeById(recipeID);
 
   return (
-    <div className="max-w-[1200px] w-full mx-auto px-5">
+    <div className="mx-auto w-full max-w-[1200px] px-5">
       <button className="flex gap-1">
         <Image src={chevron} alt="logo" width={20} height={20} />
-        <Link
-          href="/"
-          prefetch={true}
-          className="text-title font-inter text-xl"
-        >
+        <Link href="/" prefetch={true} className="font-inter text-xl text-title">
           Back
         </Link>
       </button>
       <div className="text-center">
-        <h1 className="text-[40px] font-ptSerif text-title">{recipe.title}</h1>
-        <p className="text-2xl font-inter text-body">
+        <h1 className="font-ptSerif text-[40px] text-title">{recipe.title}</h1>
+        <p className="font-inter text-2xl text-body">
           {recipe.folder ? 'In "' + recipe.folder.name + '" folder' : ""}
         </p>
       </div>

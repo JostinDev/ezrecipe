@@ -9,13 +9,11 @@ export default function FormRecipeTitle({ formError }: FormRecipeTitleProps) {
       <TextField isRequired name="recipeName">
         <Input
           placeholder="New recipe"
-          className="text-[40px] w-full max-w-[400px] rounded-lg font-ptSerif text-center text-title bg-transparent border border-dashed border-title p-2"
+          className="w-full max-w-[400px] rounded-lg border border-dashed border-title bg-transparent p-2 text-center font-ptSerif text-[40px] text-title"
         ></Input>
         <div className="mt-2">
           <FieldError className="font-inter text-base text-error" />
-          <span className="font-inter text-base text-error">
-            {formError?.[0]}
-          </span>
+          <span className="font-inter text-base text-error">{formError?.[0]}</span>
         </div>
       </TextField>
     </div>

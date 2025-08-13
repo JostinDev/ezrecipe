@@ -7,9 +7,7 @@ type PeopleCalculatorCreateProps = {
   people?: number;
 };
 
-export default function PeopleCalculatorCreate({
-  people,
-}: PeopleCalculatorCreateProps) {
+export default function PeopleCalculatorCreate({ people }: PeopleCalculatorCreateProps) {
   const [peopleNumber, setPeopleNumber] = useState(people || 1);
 
   function handlePeopleCounter(newValue: number) {
@@ -20,37 +18,29 @@ export default function PeopleCalculatorCreate({
   }
 
   return (
-    <div className="flex gap-2 items-center mt-2">
-      <p className="text-body font-inter text-base text-xl  text-center">
-        Recipe for
-      </p>
+    <div className="mt-2 flex items-center gap-2">
+      <p className="text-center font-inter text-base text-xl text-body">Recipe for</p>
 
       <Button
         onClick={() => handlePeopleCounter(peopleNumber - 1)}
-        className="text-body flex text-2xl justify-center items-center font-inter rounded-full border border-body p-4 w-8 h-8"
+        className="flex h-8 w-8 items-center justify-center rounded-full border border-body p-4 font-inter text-2xl text-body"
       >
         -
       </Button>
       <TextField
         name="peopleNumber"
-        className="text-body font-inter text-base text-xl w-5 text-center"
+        className="w-5 text-center font-inter text-base text-xl text-body"
       >
-        <Input
-          className="bg-transparent text-center w-5"
-          readOnly
-          value={peopleNumber}
-        ></Input>
+        <Input className="w-5 bg-transparent text-center" readOnly value={peopleNumber}></Input>
       </TextField>
 
       <Button
         onClick={() => handlePeopleCounter(peopleNumber + 1)}
-        className="text-body flex text-2xl justify-center items-center font-inter rounded-full border border-body p-4 w-8 h-8"
+        className="flex h-8 w-8 items-center justify-center rounded-full border border-body p-4 font-inter text-2xl text-body"
       >
         +
       </Button>
-      <p className="text-body font-inter text-base text-xl text-center">
-        people
-      </p>
+      <p className="text-center font-inter text-base text-xl text-body">people</p>
     </div>
   );
 }

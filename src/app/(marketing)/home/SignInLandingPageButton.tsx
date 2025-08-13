@@ -11,7 +11,7 @@ export default function SignInLandingPageButton() {
   if (!isLoaded) {
     return (
       <SignInButton mode="modal">
-        <button className="bg-pastelYellow text-title rounded-xl mt-10 px-8 py-4 font-inter font-bold border-2 transition border-title hover:drop-shadow-[4px_4px_0px] drop-shadow-shadow">
+        <button className="drop-shadow-shadow mt-10 rounded-xl border-2 border-title bg-pastelYellow px-8 py-4 font-inter font-bold text-title transition hover:drop-shadow-[4px_4px_0px]">
           Get Started
         </button>
       </SignInButton>
@@ -22,7 +22,7 @@ export default function SignInLandingPageButton() {
     <div>
       <SignedOut>
         <SignInButton mode="modal">
-          <button className="bg-pastelYellow text-title rounded-xl mt-10 px-8 py-4 font-inter font-bold border-2 transition border-title hover:drop-shadow-[4px_4px_0px] drop-shadow-shadow">
+          <button className="drop-shadow-shadow mt-10 rounded-xl border-2 border-title bg-pastelYellow px-8 py-4 font-inter font-bold text-title transition hover:drop-shadow-[4px_4px_0px]">
             Get Started
           </button>
         </SignInButton>
@@ -30,7 +30,7 @@ export default function SignInLandingPageButton() {
       <SignedIn>
         <button
           onClick={() => router.push("/")}
-          className="bg-pastelYellow text-title rounded-xl mt-10 px-8 py-4 font-inter font-bold border-2 transition border-title hover:drop-shadow-[4px_4px_0px] drop-shadow-shadow"
+          className="drop-shadow-shadow mt-10 rounded-xl border-2 border-title bg-pastelYellow px-8 py-4 font-inter font-bold text-title transition hover:drop-shadow-[4px_4px_0px]"
         >
           Go to website
         </button>

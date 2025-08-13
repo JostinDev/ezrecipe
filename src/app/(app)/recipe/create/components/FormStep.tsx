@@ -25,9 +25,7 @@ export default function FormStep({ formError }: FormStepsProps) {
 
   const updateStepDescription = (index: number, newDescription: string) => {
     setStepCards((prevSteps) =>
-      prevSteps.map((step, i) =>
-        i === index ? { ...step, description: newDescription } : step
-      )
+      prevSteps.map((step, i) => (i === index ? { ...step, description: newDescription } : step)),
     );
   };
 
@@ -56,15 +54,15 @@ export default function FormStep({ formError }: FormStepsProps) {
 
   return (
     <div>
-      <div className="pt-4 flex flex-col gap-10">
+      <div className="flex flex-col gap-10 pt-4">
         {stepCards.map((stepCard, index) => (
           <TextField
             isRequired
             key={index}
-            className="flex flex-col relative bg-pastelBlue text-titleBlue rounded-lg p-5 w-full transition drop-shadow-[4px_4px_0px]"
+            className="relative flex w-full flex-col rounded-lg bg-pastelBlue p-5 text-titleBlue drop-shadow-[4px_4px_0px] transition"
           >
-            <div className="flex gap-4 items-center w-full">
-              <div className="text-titleBlue flex justify-center items-center font-inter text-base font-bold rounded-full border border-titleBlue p-4 w-10 h-10">
+            <div className="flex w-full items-center gap-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-titleBlue p-4 font-inter text-base font-bold text-titleBlue">
                 {index + 1}
               </div>
 
@@ -74,21 +72,19 @@ export default function FormStep({ formError }: FormStepsProps) {
                 onChange={(e) => updateStepDescription(index, e.target.value)}
                 placeholder="Step instructions"
                 disabled={false}
-                className="h-10 w-full rounded-md bg-transparent border border-titleBlue border-dashed p-2"
+                className="h-10 w-full rounded-md border border-dashed border-titleBlue bg-transparent p-2"
               />
             </div>
             <Button
               type="button"
-              className="flex items-center justify-center absolute -top-2 -right-2 w-[30px] h-[30px] font-inter bg-background border border-title text-title rounded-full"
+              className="absolute -right-2 -top-2 flex h-[30px] w-[30px] items-center justify-center rounded-full border border-title bg-background font-inter text-title"
               onClick={() => removeStepByIndex(index)}
             >
               <Image src={cross} alt="logo" width={24} height={24} />
             </Button>
             <div className="ml-[56px]">
               <FieldError className="font-inter text-sm text-error" />
-              <span className="font-inter text-sm text-error">
-                {formError?.[index]}
-              </span>
+              <span className="font-inter text-sm text-error">{formError?.[index]}</span>
             </div>
           </TextField>
         ))}
@@ -98,14 +94,12 @@ export default function FormStep({ formError }: FormStepsProps) {
         <Button
           type="button"
           onClick={() => addStep()}
-          className="flex border z-20 relative gap-4 items-center z-20 border-title rounded-lg p-5 bg-[url(/noisy-texture-200x200.png)] w-full bg-background bg-repeat bg-size-[200px_200px]"
+          className="bg-size-[200px_200px] relative z-20 flex w-full items-center gap-4 rounded-lg border border-title bg-background bg-[url(/noisy-texture-200x200.png)] bg-repeat p-5"
         >
           <Image src={add} alt="logo" width={40} height={40} />
-          <p className="font-inter text-base font-bold text-title">
-            Add a new Step
-          </p>
+          <p className="font-inter text-base font-bold text-title">Add a new Step</p>
         </Button>
-        <div className="border z-10 absolute top-1 left-1 transition-all w-full h-full border-title rounded-[8px] p-3"></div>
+        <div className="absolute left-1 top-1 z-10 h-full w-full rounded-[8px] border border-title p-3 transition-all"></div>
       </div>
     </div>
   );

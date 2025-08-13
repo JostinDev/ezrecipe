@@ -27,17 +27,14 @@ export default function FormRecipe({ folders }: FormRecipeProps) {
   });
 
   return (
-    <Form
-      action={formAction}
-      className="max-w-[1200px] w-full mx-auto px-2 lg:px-5 pb-10"
-    >
+    <Form action={formAction} className="mx-auto w-full max-w-[1200px] px-2 pb-10 lg:px-5">
       <BackToHomeButton />
       <FormRecipeTitle formError={state.errors?.recipeName} />
       <FolderSelector folders={folders} />
-      <h2 className="text-[32px] font-ptSerif text-title pt-12">Ingredients</h2>
+      <h2 className="pt-12 font-ptSerif text-[32px] text-title">Ingredients</h2>
       <PeopleCalculatorCreate people={undefined} />
       <CardIngredientCreate formError={state.errors?.ingredientGroups} />
-      <h2 className="text-[32px] font-ptSerif text-title pt-12">Steps</h2>
+      <h2 className="pt-12 font-ptSerif text-[32px] text-title">Steps</h2>
       <FormStep formError={state.errors?.steps} />
       <FormSubmitButton isFormPending={isPending} />
     </Form>

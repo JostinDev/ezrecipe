@@ -1,4 +1,3 @@
-import { error } from "console";
 import type { Config } from "tailwindcss";
 import defaultTheme from "tailwindcss/defaultTheme";
 
