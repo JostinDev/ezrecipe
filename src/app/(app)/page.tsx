@@ -16,13 +16,13 @@ export default async function Home() {
           <CardFolder key={folder.folderId} folderName={folder.folderName} count={folder.count} />
         ))}
         <div className="group relative">
-          <button className="bg-size-[200px_200px] relative z-20 flex max-w-[200px] justify-between rounded-lg border border-title bg-background bg-[url(/noisy-texture-200x200.png)] bg-repeat p-3">
+          <button className="bg-size-[200px_200px] relative z-20 flex max-h-[50px] max-w-[200px] justify-between rounded-lg border border-title bg-background bg-[url(/noisy-texture-200x200.png)] bg-repeat p-3">
             <Link href="/folder/create" className="z-20 flex gap-2">
               <Image src={add} alt="logo" width={24} height={24} />
               <p className="font-inter text-base text-title">New folder</p>
             </Link>
           </button>
-          <div className="absolute left-0 top-0 z-10 h-full w-full rounded-[8px] border border-title p-3 transition-all group-hover:left-1 group-hover:top-1"></div>
+          <div className="absolute left-0 top-0 z-10 h-full max-h-[50px] w-full rounded-[8px] border border-title p-3 transition-all group-hover:left-1 group-hover:top-1"></div>
         </div>
       </div>
 
@@ -34,13 +34,13 @@ export default async function Home() {
           </Link>
         ))}
         <div className="group relative">
-          <button className="bg-size-[200px_200px] relative z-20 flex max-w-[200px] justify-between rounded-lg border border-title bg-background bg-[url(/noisy-texture-200x200.png)] bg-repeat p-3">
+          <button className="bg-size-[200px_200px] relative z-20 flex max-h-[50px] max-w-[200px] justify-between rounded-lg border border-title bg-background bg-[url(/noisy-texture-200x200.png)] bg-repeat p-3">
             <Link href="/recipe/create" className="z-20 flex gap-2">
               <Image src={add} alt="logo" width={24} height={24} />
               <p className="font-inter text-base text-title">New recipe</p>
             </Link>
           </button>
-          <div className="absolute left-0 top-0 z-10 h-full w-full rounded-[8px] border border-title p-3 transition-all group-hover:left-1 group-hover:top-1"></div>
+          <div className="absolute left-0 top-0 z-10 h-full max-h-[50px] w-full rounded-[8px] border border-title p-3 transition-all group-hover:left-1 group-hover:top-1"></div>
         </div>
       </div>
     </div>
