@@ -13,7 +13,9 @@ export default async function Home() {
       <h2 className="font-ptSerif text-[32px] text-title">Folders</h2>
       <div className="flex flex-row flex-wrap items-center gap-4 pt-4">
         {folders.map((folder) => (
-          <CardFolder key={folder.folderId} folderName={folder.folderName} count={folder.count} />
+          <Link href={`/folder/${folder.folderId}`} prefetch={true} key={folder.folderId}>
+            <CardFolder key={folder.folderId} folderName={folder.folderName} count={folder.count} />
+          </Link>
         ))}
         <div className="group relative">
           <button className="bg-size-[200px_200px] relative z-20 flex max-h-[50px] max-w-[200px] justify-between rounded-lg border border-title bg-background bg-[url(/noisy-texture-200x200.png)] bg-repeat p-3">
@@ -27,6 +29,7 @@ export default async function Home() {
       </div>
 
       <h2 className="pt-12 font-ptSerif text-[32px] text-title">Recipes</h2>
+      <p className="font-inter text-sm text-body">Recipes without a folder</p>
       <div className="flex flex-row flex-wrap gap-4 pt-4">
         {recipesWithoutFolder.map((recipe) => (
           <Link href={`/recipe/${recipe.id}`} prefetch={true} key={recipe.id}>

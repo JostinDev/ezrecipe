@@ -83,3 +83,32 @@ export async function getUserFolders() {
     },
   });
 }
+export async function getRecipesWithoutFolder() {
+  const { userId, redirectToSignIn } = await auth();
+  if (!userId) return redirectToSignIn();
+
+  return await db.query.recipe.findMany({
+    where: (r, { and, eq, isNull }) => and(eq(r.userID, userId), isNull(r.folderId)),
+    columns: { id: true, title: true },
+  });
+}
+
+export async function getFolderWithRecipes(folderId: number) {
+  const { userId, redirectToSignIn } = await auth();
+  if (!userId) return redirectToSignIn();
+  // 1) Ensure the folder exists and is owned by the user
+  const folder = await db.query.folder.findFirst({
+    where: (tbl, { and, eq }) => and(eq(tbl.id, folderId), eq(tbl.userID, userId)),
+    columns: { id: true, name: true },
+  });
+
+  if (!folder) return null;
+
+  // 2) Fetch its recipes (also scoped to the same user, for safety)
+  const recipes = await db.query.recipe.findMany({
+    where: (r, { and, eq }) => and(eq(r.folderId, folderId), eq(r.userID, userId)),
+    columns: { id: true, title: true, people: true },
+  });
+
+  return { ...folder, recipes };
+}

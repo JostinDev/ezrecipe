@@ -5,6 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import { db } from "@/server/db";
 import * as schema from "@/server/db/schema";
 import { redirect } from "next/navigation";
+import { and, eq, inArray, isNull } from "drizzle-orm";
 
 const formSchema = z.object({
   recipeName: z.coerce
@@ -272,4 +273,75 @@ export async function createRecipe(prevState: any, formData: FormData) {
     return recipeId;
   });
   redirect(`/recipe/${recipeID}`);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function createFolder(prevState: any, formData: FormData) {
+  const { userId, redirectToSignIn } = await auth();
+  if (!userId) return redirectToSignIn();
+
+  const formSchema = z.object({
+    folderName: z.coerce
+      .string()
+      .min(1, "Recipe name is required")
+      .max(256, "Recipe name is too long"),
+  });
+
+  const result = formSchema.safeParse(Object.fromEntries(formData.entries()));
+  if (!result.success) {
+    console.log(result.error.flatten().fieldErrors);
+
+    return { errors: result.error.flatten().fieldErrors };
+  }
+
+  console.log(result);
+
+  const folderName = result.data.folderName;
+  const recipeIds = formData
+    .getAll("recipes")
+    .map((v) => Number(v))
+    .filter(Number.isFinite);
+  console.log(recipeIds);
+
+  const folderId = await db.transaction(async (tx) => {
+    // 1) Insert folder
+    const [newFolder] = await tx
+      .insert(schema.folder)
+      .values({ name: folderName, userID: userId })
+      .returning({ id: schema.folder.id });
+
+    const id = newFolder.id as number;
+
+    // 2) If any recipe IDs were provided, validate ownership & unfiled state
+    if (recipeIds.length > 0) {
+      const validTargets = await tx
+        .select({ id: schema.recipe.id })
+        .from(schema.recipe)
+        .where(
+          and(
+            inArray(schema.recipe.id, recipeIds),
+            eq(schema.recipe.userID, userId),
+            isNull(schema.recipe.folderId), // only attach unfiled; remove if you want to "move"
+          ),
+        );
+
+      // If the provided IDs don't all match the criteria, abort (rollback)
+      if (validTargets.length !== recipeIds.length) {
+        throw new Error(
+          "One or more recipes cannot be assigned (not yours or already in a folder).",
+        );
+      }
+
+      // 3) Assign recipes to the new folder
+      await tx
+        .update(schema.recipe)
+        .set({ folderId: id })
+        .where(inArray(schema.recipe.id, recipeIds));
+    }
+
+    return id;
+  });
+
+  // Outside the txn: revalidate any lists/pages you show
+  redirect(`/folder/${folderId}`);
 }
