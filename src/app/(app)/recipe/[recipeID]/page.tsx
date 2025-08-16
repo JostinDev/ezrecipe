@@ -3,6 +3,7 @@ import RecipeDisplayer from "../component/RecipeDisplayer";
 import Link from "next/link";
 import Image from "next/image";
 import chevron from "@/app/(app)/img/chevron_left.svg";
+import RecipeOptions from "@/app/(app)/recipe/[recipeID]/Component/RecipeOptions";
 
 type RecipeProps = {
   params: Promise<{ recipeID: string }>;
@@ -22,11 +23,15 @@ export default async function Recipe({ params }: RecipeProps) {
           Back
         </Link>
       </button>
-      <div className="text-center">
-        <h1 className="font-ptSerif text-[40px] text-title">{recipe.title}</h1>
-        <p className="font-inter text-2xl text-body">
-          {recipe.folder ? 'In "' + recipe.folder.name + '" folder' : ""}
-        </p>
+      <div className="flex items-center justify-between">
+        <div className="mx-auto self-center text-center">
+          <h1 className="font-ptSerif text-[40px] text-title">{recipe.title}</h1>
+          <p className="font-inter text-2xl text-body">
+            {recipe.folder ? 'In "' + recipe.folder.name + '" folder' : ""}
+          </p>
+        </div>
+
+        <RecipeOptions recipeID={recipeID} />
       </div>
 
       <RecipeDisplayer

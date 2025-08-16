@@ -26,7 +26,7 @@ export default function PeopleCalculator({ people, onSetPeopleNumber }: PeopleCa
       >
         -
       </button>
-      <p className="w-5 text-center font-inter text-base text-xl text-body">{people}</p>
+      <p className="w-5 text-center font-inter text-xl text-body">{people}</p>
 
       <button
         onClick={() => handlePeopleCounter(people + 1)}

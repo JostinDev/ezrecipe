@@ -294,8 +294,6 @@ export async function createFolder(prevState: any, formData: FormData) {
     return { errors: result.error.flatten().fieldErrors };
   }
 
-  console.log(result);
-
   const folderName = result.data.folderName;
   const recipeIds = formData
     .getAll("recipes")
@@ -344,4 +342,27 @@ export async function createFolder(prevState: any, formData: FormData) {
 
   // Outside the txn: revalidate any lists/pages you show
   redirect(`/folder/${folderId}`);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function deleteRecipe(prevState: any, formData: FormData) {
+  const { userId, redirectToSignIn } = await auth();
+  if (!userId) return redirectToSignIn();
+
+  const formSchema = z.object({
+    recipeID: z.coerce.number(),
+  });
+
+  const result = formSchema.safeParse(Object.fromEntries(formData.entries()));
+  if (!result.success) {
+    return { errors: result.error.flatten().fieldErrors };
+  }
+
+  const recipeID = result.data.recipeID;
+
+  await db
+    .delete(schema.recipe)
+    .where(and(eq(schema.recipe.id, recipeID), eq(schema.recipe.userID, userId)));
+
+  redirect(`/`);
 }

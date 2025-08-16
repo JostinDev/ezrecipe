@@ -15,13 +15,11 @@ export const unitEnum = pgEnum("metric_system_units", [
 ]);
 
 /*********** FOLDER ***********/
-
 export const folder = pgTable("folder", {
   id: serial("id").primaryKey(),
   name: varchar({ length: 256 }).notNull(),
   userID: varchar("user_id", { length: 256 }).notNull(),
 });
-
 export type Folder = typeof folder.$inferSelect;
 
 export const folderRelations = relations(folder, ({ many }) => ({
@@ -29,15 +27,13 @@ export const folderRelations = relations(folder, ({ many }) => ({
 }));
 
 /*********** RECIPE ***********/
-
 export const recipe = pgTable("recipe", {
   id: serial("id").primaryKey(),
   userID: varchar("user_id", { length: 256 }).notNull(),
   title: varchar("title", { length: 256 }).notNull(),
   people: integer("people").notNull(),
-  folderId: integer("folder_id").references(() => folder.id),
+  folderId: integer("folder_id").references(() => folder.id, { onDelete: "set null" }),
 });
-
 export type Recipe = typeof recipe.$inferSelect;
 
 export const recipeRelations = relations(recipe, ({ one, many }) => ({
@@ -50,15 +46,13 @@ export const recipeRelations = relations(recipe, ({ one, many }) => ({
 }));
 
 /*********** STEP ***********/
-
 export const step = pgTable("step", {
   id: serial("id").primaryKey(),
   description: varchar("description", { length: 2000 }).notNull(),
   recipeId: integer("recipe_id")
     .notNull()
-    .references(() => recipe.id),
+    .references(() => recipe.id, { onDelete: "cascade" }),
 });
-
 export type Step = typeof step.$inferSelect;
 
 export const stepRelations = relations(step, ({ one }) => ({
@@ -69,15 +63,13 @@ export const stepRelations = relations(step, ({ one }) => ({
 }));
 
 /*********** INGREDIENT_GROUP ***********/
-
 export const ingredientGroup = pgTable("ingredient_group", {
   id: serial("id").primaryKey(),
   title: varchar("title", { length: 256 }).notNull(),
   recipeId: integer("recipe_id")
     .notNull()
-    .references(() => recipe.id),
+    .references(() => recipe.id, { onDelete: "cascade" }),
 });
-
 export type IngredientGroup = typeof ingredientGroup.$inferSelect;
 
 export const ingredientGroupRelations = relations(ingredientGroup, ({ one, many }) => ({
@@ -89,17 +81,15 @@ export const ingredientGroupRelations = relations(ingredientGroup, ({ one, many 
 }));
 
 /*********** INGREDIENT ***********/
-
 export const ingredient = pgTable("ingredient", {
   id: serial("id").primaryKey(),
   quantity: numeric("quantity", { precision: 10, scale: 2 }).notNull(),
   ingredientGroupId: integer("ingredient_group_id")
     .notNull()
-    .references(() => ingredientGroup.id),
+    .references(() => ingredientGroup.id, { onDelete: "cascade" }),
   unit: unitEnum("unit").notNull(),
   description: varchar("description", { length: 256 }).notNull(),
 });
-
 export type Ingredient = typeof ingredient.$inferSelect;
 
 export const ingredientRelations = relations(ingredient, ({ one }) => ({
