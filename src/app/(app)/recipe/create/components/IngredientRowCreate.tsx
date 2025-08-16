@@ -154,8 +154,8 @@ export default function IngredientRowCreate({ ingredientGroup, formError }: Ingr
             </Button>
           </div>
           <div className="mt-1 flex flex-col">
-            <span className="font-inter text-sm text-error">{formError?.[index].amount}</span>
-            <span className="font-inter text-sm text-error">{formError?.[index].ingredient}</span>
+            <span className="font-inter text-sm text-red-500">{formError?.[index].amount}</span>
+            <span className="font-inter text-sm text-red-500">{formError?.[index].ingredient}</span>
           </div>
         </div>
       ))}

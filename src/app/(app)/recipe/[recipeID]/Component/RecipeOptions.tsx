@@ -17,6 +17,9 @@ export default function RecipeOptions({ recipeID }: RecipeOptionProps) {
   function copyLink() {
     navigator.clipboard.writeText(link).then(() => {
       setCopied("Link copied!");
+      setTimeout(() => {
+        setCopied("Sharing link");
+      }, 3000);
     });
   }
 
