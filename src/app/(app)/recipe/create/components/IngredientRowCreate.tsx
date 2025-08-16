@@ -82,8 +82,6 @@ export default function IngredientRowCreate({ ingredientGroup, formError }: Ingr
     setIngredientRow([...ingredientRow, newIngredientRow]);
   };
   const removeIngredientRowByIndex = (index: number) => {
-    console.log("Index to remove", index);
-
     setIngredientRow((prevRows) => prevRows.filter((_, i) => i !== index));
   };
 

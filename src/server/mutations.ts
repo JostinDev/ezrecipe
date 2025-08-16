@@ -212,7 +212,6 @@ export async function createRecipe(prevState: any, formData: FormData) {
         };
       }
     }
-    console.log("GROUP ERROR:\n", JSON.stringify(groupErrors, null, 2));
 
     return {
       errors: {
@@ -289,8 +288,6 @@ export async function createFolder(prevState: any, formData: FormData) {
 
   const result = formSchema.safeParse(Object.fromEntries(formData.entries()));
   if (!result.success) {
-    console.log(result.error.flatten().fieldErrors);
-
     return { errors: result.error.flatten().fieldErrors };
   }
 
@@ -299,7 +296,6 @@ export async function createFolder(prevState: any, formData: FormData) {
     .getAll("recipes")
     .map((v) => Number(v))
     .filter(Number.isFinite);
-  console.log(recipeIds);
 
   const folderId = await db.transaction(async (tx) => {
     // 1) Insert folder

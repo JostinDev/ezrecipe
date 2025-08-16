@@ -3,7 +3,6 @@ import { clerkMiddleware } from "@clerk/nextjs/server";
 
 export default clerkMiddleware(async (auth, request) => {
   const isSignedIn = Boolean((await auth()).userId);
-  console.log(isSignedIn);
 
   if (request.nextUrl.pathname !== "/api/webhooks" && !isSignedIn) {
     return NextResponse.rewrite(new URL("/home", request.url));

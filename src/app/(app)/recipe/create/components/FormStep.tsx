@@ -2,14 +2,13 @@ import { Button, FieldError, Input, TextField } from "react-aria-components";
 import cross from "@/app/(app)/img/cross.svg";
 import add from "@/app/(app)/img/plus_button.svg";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type FormStepsProps = {
   formError: string[] | undefined;
 };
 
 export default function FormStep({ formError }: FormStepsProps) {
-  console.log(formError);
   type StepCard = {
     description: string;
     index: number;
@@ -29,10 +28,6 @@ export default function FormStep({ formError }: FormStepsProps) {
     );
   };
 
-  useEffect(() => {
-    console.log(stepCards);
-  }, [stepCards]);
-
   const addStep = () => {
     const newStep: StepCard = {
       description: "",
@@ -43,14 +38,8 @@ export default function FormStep({ formError }: FormStepsProps) {
   };
 
   const removeStepByIndex = (index: number) => {
-    console.log("Index to remove", index);
-
     setStepCards((prevSteps) => prevSteps.filter((_, i) => i !== index));
   };
-
-  useEffect(() => {
-    console.log(formError);
-  }, [formError]);
 
   return (
     <div>
