@@ -6,6 +6,7 @@ import { db } from "@/server/db";
 import * as schema from "@/server/db/schema";
 import { redirect } from "next/navigation";
 import { and, eq, inArray, isNull } from "drizzle-orm";
+import randomStringGenerator from "@/utils/randomStringGenerator";
 
 const formSchema = z.object({
   recipeName: z.coerce
@@ -232,6 +233,7 @@ export async function createRecipe(prevState: any, formData: FormData) {
     title: recipeName,
     people: peopleNumber,
     ...(selectedFolder !== -1 && { folderId: selectedFolder }),
+    shareToken: randomStringGenerator(),
   };
 
   //Persist atomically

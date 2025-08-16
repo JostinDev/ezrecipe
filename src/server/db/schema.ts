@@ -33,6 +33,7 @@ export const recipe = pgTable("recipe", {
   title: varchar("title", { length: 256 }).notNull(),
   people: integer("people").notNull(),
   folderId: integer("folder_id").references(() => folder.id, { onDelete: "set null" }),
+  shareToken: varchar("share_token", { length: 32 }).notNull(),
 });
 export type Recipe = typeof recipe.$inferSelect;
 

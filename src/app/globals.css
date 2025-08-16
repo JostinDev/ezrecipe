@@ -51,28 +51,8 @@
   }
 }
 
-.react-aria-Popover[data-trigger="Select"] {
-  opacity: 1;
-  transform: scale(1);
-  transition:
-    opacity 150ms ease,
-    transform 150ms ease;
-  transform-origin: top left;
-}
 
-.react-aria-Popover[data-entering] {
-  opacity: 1;
-  transform: scale(0.95);
-}
-
-.react-aria-Popover[data-exiting] {
-  opacity: 0;
-  transform: scale(0.95);
-}
-
-
-
-.react-aria-Popover {
+.editOptions {
     @apply text-title bg-transparent p-4 border border-title shadow-xl rounded-md;
 
     outline: none;

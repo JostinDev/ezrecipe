@@ -119,7 +119,7 @@ export default function IngredientRowCreate({ ingredientGroup, formError }: Ingr
                   <SelectValue />
                   <span aria-hidden="true">▼</span>
                 </Button>
-                <Popover>
+                <Popover className="w-full max-w-[70px] origin-top-left scale-100 opacity-100 transition-all duration-150 ease-in-out [&[data-entering]]:scale-95 [&[data-entering]]:opacity-100 [&[data-exiting]]:scale-95 [&[data-exiting]]:opacity-0">
                   <ListBox className="rounded-lg border border-title bg-background p-2">
                     {options.map((option) => (
                       <ListBoxItem

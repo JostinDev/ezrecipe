@@ -22,18 +22,18 @@ export default function FolderSelector({ folders }: CardStepCreateProps) {
   return (
     <TextField className="mt-5 flex justify-center">
       <Select
-        selectedKey={-1}
+        defaultSelectedKey={-1}
         isRequired
         name="selectedFolder"
         placeholder="Add folder"
-        className="rounded-md border border-dashed border-titleBlue bg-transparent font-inter text-2xl text-body"
+        className="w-full max-w-60 rounded-md border border-dashed border-titleBlue bg-transparent font-inter text-2xl text-body"
       >
         <Button className="flex w-full justify-between p-2">
-          <SelectValue />
+          <SelectValue className="mx-auto items-center justify-center" />
           <span aria-hidden="true">▼</span>
         </Button>
 
-        <Popover>
+        <Popover className="w-full max-w-60 origin-top-left scale-100 opacity-100 transition-all duration-150 ease-in-out [&[data-entering]]:scale-95 [&[data-entering]]:opacity-100 [&[data-exiting]]:scale-95 [&[data-exiting]]:opacity-0">
           <ListBox className="rounded-lg border border-title bg-background p-2">
             <ListBoxItem
               id={-1}
