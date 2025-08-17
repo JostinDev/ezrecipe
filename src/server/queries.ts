@@ -1,10 +1,11 @@
 "use server";
 
-import { auth } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
+import { auth, clerkClient } from "@clerk/nextjs/server";
+import { and, eq } from "drizzle-orm";
 
 import { db } from "@/server/db";
 import * as schema from "@/server/db/schema";
+import { redirect } from "next/navigation";
 
 export async function getRecipes() {
   const { userId, redirectToSignIn } = await auth();
@@ -116,4 +117,33 @@ export async function getFolderWithRecipes(folderId: number) {
   });
 
   return { ...folder, recipes };
+}
+
+export async function getRecipeByToken(token: string) {
+  const { userId, redirectToSignIn } = await auth();
+  if (!userId) return redirectToSignIn();
+
+  // only select what you need
+  const recipe = await db.query.recipe.findFirst({
+    where: and(eq(schema.recipe.shareToken, token), eq(schema.recipe.userID, userId)),
+    columns: {
+      id: true,
+      title: true,
+      userID: true,
+    },
+  });
+
+  if (!recipe) {
+    redirect("/");
+  }
+
+  // look up the Clerk user to get the username
+  const client = await clerkClient();
+  const user = await client.users.getUser(recipe.userID);
+
+  return {
+    id: recipe.id,
+    title: recipe.title,
+    username: user.username ?? user.firstName ?? "Unknown",
+  };
 }

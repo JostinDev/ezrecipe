@@ -364,3 +364,92 @@ export async function deleteRecipe(prevState: any, formData: FormData) {
 
   redirect(`/`);
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function saveSharedRecipe(prevState: any, formData: FormData) {
+  const { userId, redirectToSignIn } = await auth();
+  if (!userId) return redirectToSignIn();
+
+  const formSchema = z.object({
+    recipeID: z.coerce.number(),
+  });
+
+  const result = formSchema.safeParse(Object.fromEntries(formData.entries()));
+  if (!result.success) {
+    return { errors: result.error.flatten().fieldErrors };
+  }
+
+  const originalRecipeID = result.data.recipeID;
+
+  let copiedRecipeID;
+
+  await db.transaction(async (tx) => {
+    // 1) Load original with all relations INSIDE the transaction
+    const original = await tx.query.recipe.findFirst({
+      where: eq(schema.recipe.id, originalRecipeID),
+      with: {
+        steps: true,
+        ingredientGroups: {
+          with: { ingredients: true },
+        },
+      },
+    });
+
+    if (!original) {
+      throw new Error("Recipe not found");
+    }
+
+    // 2) Create the new recipe for the current user
+    //    (omit shareToken so the DB default fills it; include if you generate in app)
+    const [newRecipe] = await tx
+      .insert(schema.recipe)
+      .values({
+        userID: userId,
+        title: original.title,
+        people: original.people,
+        folderId: null,
+        shareToken: randomStringGenerator(),
+      })
+      .returning();
+
+    console.log(newRecipe);
+
+    copiedRecipeID = newRecipe.id;
+
+    console.log("NEW ID", copiedRecipeID);
+
+    // 3) Copy steps
+    if (original.steps.length > 0) {
+      await tx.insert(schema.step).values(
+        original.steps.map((s) => ({
+          description: s.description,
+          recipeId: newRecipe.id,
+        })),
+      );
+    }
+
+    // 4) Copy ingredient groups + ingredients
+    for (const group of original.ingredientGroups) {
+      const [newGroup] = await tx
+        .insert(schema.ingredientGroup)
+        .values({
+          title: group.title,
+          recipeId: newRecipe.id,
+        })
+        .returning();
+
+      if (group.ingredients.length > 0) {
+        await tx.insert(schema.ingredient).values(
+          group.ingredients.map((i) => ({
+            description: i.description,
+            quantity: i.quantity, // numeric maps through as string/decimal as defined
+            unit: i.unit,
+            ingredientGroupId: newGroup.id,
+          })),
+        );
+      }
+    }
+    // 5) Redirect to the new recipe page
+  });
+  redirect(`/recipe/${copiedRecipeID}`);
+}
