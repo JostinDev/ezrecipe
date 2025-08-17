@@ -10,6 +10,7 @@ export async function getRecipes() {
   const { userId, redirectToSignIn } = await auth();
   if (!userId) return redirectToSignIn();
 
+  // fetch all recipes for the user
   const recipes = await db.query.recipe.findMany({
     where: eq(schema.recipe.userID, userId),
     with: {
@@ -17,25 +18,29 @@ export async function getRecipes() {
     },
   });
 
+  // fetch all folders for the user (independent of recipes)
+  const allFolders = await db.query.folder.findMany({
+    where: eq(schema.folder.userID, userId),
+  });
+
   const recipesWithoutFolder: typeof recipes = [];
-  const foldersMap: Map<string, { folderName: string; folderId: number; count: number }> =
+  const foldersMap: Map<number, { folderName: string; folderId: number; count: number }> =
     new Map();
 
+  // initialize all folders with count = 0
+  for (const folder of allFolders) {
+    foldersMap.set(folder.id, {
+      folderName: folder.name,
+      folderId: folder.id,
+      count: 0,
+    });
+  }
+
+  // count recipes into their folders
   for (const recipe of recipes) {
     if (recipe.folder) {
       const folderId = recipe.folder.id;
-      const folderName = recipe.folder.name;
-      const folderKey = `${folderId}`;
-
-      if (!foldersMap.has(folderKey)) {
-        foldersMap.set(folderKey, {
-          folderName,
-          folderId,
-          count: 0,
-        });
-      }
-
-      foldersMap.get(folderKey)!.count += 1;
+      foldersMap.get(folderId)!.count += 1;
     } else {
       recipesWithoutFolder.push(recipe);
     }
