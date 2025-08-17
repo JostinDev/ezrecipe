@@ -44,7 +44,11 @@ export default function DeleteRecipeModal({ recipeID }: RecipeOptionProps) {
                   isDisabled={isPending}
                   className="relative z-20 flex max-h-[50px] max-w-[200px] items-center justify-center gap-2 rounded-lg border border-red-500 bg-red-500 px-3 py-2 text-sm font-semibold text-white"
                 >
-                  {isPending ? <div className="loader" /> : ""}
+                  {isPending ? (
+                    <div className="h-5 w-5 animate-spin rounded-full border-2 border-transparent border-t-white"></div>
+                  ) : (
+                    ""
+                  )}
                   <p>Delete</p>
                 </Button>
                 <div className="absolute left-0 top-0 z-10 h-full max-h-[50px] w-full rounded-[8px] border border-transparent bg-shadow p-3 transition-all group-hover:left-1 group-hover:top-1"></div>
