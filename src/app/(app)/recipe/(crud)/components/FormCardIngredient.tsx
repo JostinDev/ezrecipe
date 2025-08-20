@@ -7,6 +7,8 @@ import cross from "@/app/(app)/img/cross.svg";
 import add from "@/app/(app)/img/plus_button.svg";
 import { useState } from "react";
 
+import { IngredientGroup } from "@/app/(app)/types/types";
+
 type GroupError = {
   title?: string;
   ingredients?: {
@@ -17,55 +19,57 @@ type GroupError = {
 
 type FormCardIngredientProps = {
   formError: Record<number, GroupError> | undefined;
+  currentGroup?: IngredientGroup[];
 };
 
-export default function FormCardIngredient({ formError }: FormCardIngredientProps) {
-  type IngredientGroupCard = {
-    title: string;
-    index: number;
-  };
+// UI-only card model: uid for React, optional id for DB
+type IngredientGroupCard = {
+  uid: number; // local stable key
+  id?: number; // DB id when editing existing group
+  title: string;
+};
 
-  const [ingredientGroupIndex, setIngredientGroupIndex] = useState(1);
-  const [ingredientGroupCards, setIngredientGroupCards] = useState<IngredientGroupCard[]>([
-    {
-      title: "",
-      index: 0,
-    },
-  ]);
+export default function FormCardIngredient({ formError, currentGroup }: FormCardIngredientProps) {
+  const initialGroupCards: IngredientGroupCard[] = currentGroup?.map((g, i) => ({
+    uid: i, // local key 0..n-1
+    id: g.id, // keep DB id
+    title: g.title,
+  })) ?? [{ uid: 0, title: "" }];
 
-  const updateIngredientGroupTitle = (index: number, newTitle: string) => {
-    setIngredientGroupCards((prevIngredientGroup) =>
-      prevIngredientGroup.map((ingredientGroup, i) =>
-        i === index ? { ...ingredientGroup, title: newTitle } : ingredientGroup,
-      ),
+  const [uidCounter, setUidCounter] = useState(initialGroupCards.length);
+  const [ingredientGroupCards, setIngredientGroupCards] =
+    useState<IngredientGroupCard[]>(initialGroupCards);
+
+  const updateIngredientGroupTitle = (uid: number, newTitle: string) => {
+    setIngredientGroupCards((prev) =>
+      prev.map((g) => (g.uid === uid ? { ...g, title: newTitle } : g)),
     );
   };
 
   const addIngredientGroupCard = () => {
-    const newIngredientGroup: IngredientGroupCard = {
-      title: "",
-      index: ingredientGroupIndex,
-    };
-    setIngredientGroupIndex(ingredientGroupIndex + 1);
-    setIngredientGroupCards([...ingredientGroupCards, newIngredientGroup]);
+    setIngredientGroupCards((prev) => [
+      ...prev,
+      { uid: uidCounter, title: "" }, // new group has no DB id yet
+    ]);
+    setUidCounter((c) => c + 1);
   };
 
-  const removeIngredientGroup = (index: number) => {
-    setIngredientGroupCards((prevSteps) => prevSteps.filter((_, i) => i !== index));
+  const removeIngredientGroupByUid = (uid: number) => {
+    setIngredientGroupCards((prev) => prev.filter((g) => g.uid !== uid));
   };
 
   return (
     <div className="flex flex-wrap gap-10 pt-4">
-      {ingredientGroupCards.map((ingredientGroupCard, index) => (
+      {ingredientGroupCards.map((card, index) => (
         <div
-          key={ingredientGroupCard.index}
+          key={card.uid}
           className="relative flex w-full flex-col rounded-lg bg-pastelBlue p-5 text-titleBlue drop-shadow-[4px_4px_0px] transition sm:max-w-[400px]"
         >
           <TextField isRequired>
             <Input
               name={`ingredientGroup[${index}].title`}
-              value={ingredientGroupCard.title}
-              onChange={(e) => updateIngredientGroupTitle(index, e.target.value)}
+              value={card.title}
+              onChange={(e) => updateIngredientGroupTitle(card.uid, e.target.value)}
               placeholder="Ingredient group title"
               disabled={false}
               className="h-10 w-full rounded-md border border-dashed border-titleBlue bg-transparent p-2 font-bold"
@@ -78,11 +82,12 @@ export default function FormCardIngredient({ formError }: FormCardIngredientProp
             <IngredientRowCreate
               formError={formError?.[index].ingredients}
               ingredientGroup={index}
+              currentIngredients={currentGroup?.[index]?.ingredients}
             />
           </div>
           <Button
             className="absolute -right-2 -top-2 flex h-[30px] w-[30px] items-center justify-center rounded-full border border-title bg-background font-inter text-title"
-            onClick={() => removeIngredientGroup(index)}
+            onClick={() => removeIngredientGroupByUid(card.uid)}
           >
             <Image src={cross} alt="logo" width={24} height={24} />
           </Button>

@@ -53,7 +53,7 @@
 
 
 .editOptions {
-    @apply text-title bg-transparent p-4 border border-title shadow-xl rounded-md;
+    @apply text-title p-4 border border-title shadow-xl rounded-md bg-[url(/noisy-texture-200x200.png)] bg-background;
 
     outline: none;
     max-width: 250px;

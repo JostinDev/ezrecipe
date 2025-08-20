@@ -14,13 +14,28 @@ import {
 
 import cross from "@/app/(app)/img/cross.svg";
 import Image from "next/image";
+import { Ingredient } from "@/app/(app)/types/types";
 
 type IngredientRowProps = {
   ingredientGroup: number;
   formError: { amount?: string; ingredient?: string }[] | undefined;
+  currentIngredients?: Ingredient[];
 };
 
-export default function IngredientRowCreate({ ingredientGroup, formError }: IngredientRowProps) {
+// UI row state: uid = local key; id = DB id (optional)
+type IngredientRow = {
+  uid: number; // local stable key for React
+  id?: number; // DB id if existing
+  amount: number;
+  unit: string;
+  ingredient: string;
+};
+
+export default function IngredientRowCreate({
+  ingredientGroup,
+  formError,
+  currentIngredients,
+}: IngredientRowProps) {
   const options = [
     { id: 1, name: "l" },
     { id: 2, name: "dl" },
@@ -34,61 +49,59 @@ export default function IngredientRowCreate({ ingredientGroup, formError }: Ingr
     { id: 10, name: "unit" },
   ];
 
-  type IngredientRow = {
-    amount: number;
-    unit: string;
-    ingredient: string;
-    index: number;
-  };
+  console.log("currentIngredients", currentIngredients);
 
-  const [ingredientIndex, setIngredientIndex] = useState(1);
-  const [ingredientRow, setIngredientRow] = useState<IngredientRow[]>([
-    {
-      amount: 0,
-      unit: "unit",
-      ingredient: "",
-      index: 0,
-    },
-  ]);
+  const initialIngredientRows: IngredientRow[] = currentIngredients?.map((ing, i) => ({
+    uid: i, // local key 0..n-1
+    id: ing.id, // DB id (tells server to update)
+    amount: Number(ing.quantity ?? 0),
+    unit: ing.unit ?? "unit",
+    ingredient: ing.description ?? "",
+  })) ?? [{ uid: 0, amount: 0, unit: "unit", ingredient: "" }];
+
+  console.log("initialIngredientRows", initialIngredientRows);
+
+  const [uidCounter, setUidCounter] = useState(initialIngredientRows.length);
+  const [ingredientRow, setIngredientRow] = useState<IngredientRow[]>(initialIngredientRows);
 
   const updateIngredientAmout = (index: number, newAmount: number) => {
-    setIngredientRow((prevAmounts) =>
-      prevAmounts.map((amount, i) => (i === index ? { ...amount, amount: newAmount } : amount)),
+    setIngredientRow((prev) =>
+      prev.map((row, i) => (i === index ? { ...row, amount: newAmount } : row)),
     );
   };
 
   const updateIngredientDescription = (index: number, ingredient: string) => {
-    setIngredientRow((prevDescriptions) =>
-      prevDescriptions.map((description, i) =>
-        i === index ? { ...description, ingredient: ingredient } : description,
-      ),
-    );
+    setIngredientRow((prev) => prev.map((row, i) => (i === index ? { ...row, ingredient } : row)));
   };
 
   const updateIngredientUnit = (index: number, unit: string) => {
-    setIngredientRow((prevUnits) =>
-      prevUnits.map((prevUnit, i) => (i === index ? { ...prevUnit, unit: unit } : prevUnit)),
-    );
+    setIngredientRow((prev) => prev.map((row, i) => (i === index ? { ...row, unit } : row)));
   };
 
   const addIngredientRow = () => {
-    const newIngredientRow: IngredientRow = {
-      amount: 0,
-      unit: "unit",
-      ingredient: "",
-      index: ingredientIndex,
-    };
-    setIngredientIndex(ingredientIndex + 1);
-    setIngredientRow([...ingredientRow, newIngredientRow]);
+    setIngredientRow((prev) => [
+      ...prev,
+      { uid: uidCounter, amount: 0, unit: "unit", ingredient: "" }, // no DB id => new
+    ]);
+    setUidCounter((c) => c + 1);
   };
+
   const removeIngredientRowByIndex = (index: number) => {
-    setIngredientRow((prevRows) => prevRows.filter((_, i) => i !== index));
+    setIngredientRow((prev) => prev.filter((_, i) => i !== index));
   };
 
   return (
     <div className="flex flex-col gap-2">
       {ingredientRow.map((row, index) => (
-        <div key={row.index}>
+        <div key={row.uid}>
+          {/* Hidden DB id for existing rows so server can diff update vs create */}
+          {row.id != null && (
+            <input
+              type="hidden"
+              name={`ingredientRow[${ingredientGroup}][${index}].id`}
+              value={row.id}
+            />
+          )}
           <div className="relative flex w-full flex-row gap-2 font-inter text-base text-titleBlue">
             <TextField
               isRequired
@@ -96,21 +109,21 @@ export default function IngredientRowCreate({ ingredientGroup, formError }: Ingr
               className="w-[140px]"
             >
               <Input
+                value={row.amount}
                 onChange={(e) => updateIngredientAmout(index, Number(e.target.value))}
                 inputMode="numeric"
                 className="h-10 w-full rounded-md border border-dashed border-titleBlue bg-transparent p-2"
                 placeholder="Amount"
-              ></Input>
+              />
             </TextField>
             <TextField className="w-[70px]">
               <Select
                 defaultSelectedKey={"unit"}
+                selectedKey={row.unit ? row.unit : "unit"}
                 isRequired
                 name={`ingredientRow[${ingredientGroup}][${index}].unit`}
                 onSelectionChange={(value) => {
-                  if (typeof value === "string") {
-                    updateIngredientUnit(index, value);
-                  }
+                  if (typeof value === "string") updateIngredientUnit(index, value);
                 }}
                 placeholder="Unit"
                 className="h-10 w-[70px] rounded-md border border-dashed border-titleBlue bg-transparent"
@@ -140,22 +153,25 @@ export default function IngredientRowCreate({ ingredientGroup, formError }: Ingr
               className="w-full"
             >
               <Input
+                value={row.ingredient}
                 onChange={(e) => updateIngredientDescription(index, e.target.value)}
                 className="h-10 w-full rounded-md border border-dashed border-titleBlue bg-transparent p-2"
                 placeholder="Ingredient"
-              ></Input>
+              />
             </TextField>
 
             <Button
               className="absolute -right-2 -top-2 flex h-[30px] w-[30px] items-center justify-center rounded-full border border-titleBlue bg-pastelBlue font-inter text-titleBlue"
               onClick={() => removeIngredientRowByIndex(index)}
             >
-              <Image src={cross} alt="logo" width={24} height={24} />
+              <Image src={cross} alt="Remove ingredient" width={24} height={24} />
             </Button>
           </div>
           <div className="mt-1 flex flex-col">
-            <span className="font-inter text-sm text-red-500">{formError?.[index].amount}</span>
-            <span className="font-inter text-sm text-red-500">{formError?.[index].ingredient}</span>
+            <span className="font-inter text-sm text-red-500">{formError?.[index]?.amount}</span>
+            <span className="font-inter text-sm text-red-500">
+              {formError?.[index]?.ingredient}
+            </span>
           </div>
         </div>
       ))}

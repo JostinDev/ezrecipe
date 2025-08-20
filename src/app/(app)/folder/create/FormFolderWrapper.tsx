@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import chevron from "@/app/(app)/img/chevron_left.svg";
 import CardRecipe from "@/app/(app)/component/CardRecipe";
-import FormSubmitButton from "@/app/(app)/recipe/create/components/FormSubmitButton";
+import FormSubmitButton from "@/app/(app)/recipe/(crud)/components/FormSubmitButton";
 import { Checkbox, CheckboxGroup, FieldError, Form, Input, TextField } from "react-aria-components";
 import { useActionState } from "react";
 import { createFolder } from "@/server/mutations";

@@ -16,13 +16,15 @@ type Folder = {
 
 type CardStepCreateProps = {
   folders: Folder[];
+  currentFolderID?: number | null;
 };
 
-export default function FolderSelector({ folders }: CardStepCreateProps) {
+export default function FolderSelector({ folders, currentFolderID }: CardStepCreateProps) {
+  console.log(currentFolderID);
   return (
     <TextField className="mt-5 flex justify-center">
       <Select
-        defaultSelectedKey={-1}
+        defaultSelectedKey={currentFolderID ? currentFolderID : -1}
         isRequired
         name="selectedFolder"
         placeholder="Add folder"

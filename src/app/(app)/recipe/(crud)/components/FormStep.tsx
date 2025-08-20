@@ -4,37 +4,42 @@ import add from "@/app/(app)/img/plus_button.svg";
 import Image from "next/image";
 import { useState } from "react";
 
+type CurrentSteps = {
+  id: number;
+  description: string;
+  recipeId: number;
+}[];
+
 type FormStepsProps = {
   formError: string[] | undefined;
+  currentSteps?: CurrentSteps;
 };
 
-export default function FormStep({ formError }: FormStepsProps) {
-  type StepCard = {
-    description: string;
-    index: number;
-  };
+type StepCard = {
+  id?: number; // DB id (present for existing steps)
+  description: string;
+  uid: number; // local unique key for React (not the DB id)
+};
 
-  const [stepIndex, setStepIndex] = useState(1);
-  const [stepCards, setStepCards] = useState<StepCard[]>([
-    {
-      description: "",
-      index: 0,
-    },
-  ]);
+export default function FormStep({ formError, currentSteps }: FormStepsProps) {
+  const initialStepCards: StepCard[] = currentSteps?.map((s, i) => ({
+    id: s.id, // keep DB id
+    description: s.description,
+    uid: i, // local key (0..n-1)
+  })) ?? [{ id: undefined, description: "", uid: 0 }];
+
+  const [uidCounter, setUidCounter] = useState(initialStepCards.length);
+  const [stepCards, setStepCards] = useState<StepCard[]>(initialStepCards);
 
   const updateStepDescription = (index: number, newDescription: string) => {
-    setStepCards((prevSteps) =>
-      prevSteps.map((step, i) => (i === index ? { ...step, description: newDescription } : step)),
+    setStepCards((prev) =>
+      prev.map((s, i) => (i === index ? { ...s, description: newDescription } : s)),
     );
   };
 
   const addStep = () => {
-    const newStep: StepCard = {
-      description: "",
-      index: stepIndex,
-    };
-    setStepIndex(stepIndex + 1);
-    setStepCards([...stepCards, newStep]);
+    setStepCards((prev) => [...prev, { id: undefined, description: "", uid: uidCounter }]);
+    setUidCounter((c) => c + 1);
   };
 
   const removeStepByIndex = (index: number) => {
@@ -44,12 +49,14 @@ export default function FormStep({ formError }: FormStepsProps) {
   return (
     <div>
       <div className="flex flex-col gap-10 pt-4">
-        {stepCards.map((stepCard, index) => (
+        {stepCards.map((card, index) => (
           <TextField
             isRequired
-            key={index}
+            key={card.uid}
             className="relative flex w-full flex-col rounded-lg bg-pastelBlue p-5 text-titleBlue drop-shadow-[4px_4px_0px] transition"
           >
+            {/* Hidden field tells the server this row maps to an existing DB row */}
+            {card.id != null && <input type="hidden" name={`step[${index}].id`} value={card.id} />}
             <div className="flex w-full items-center gap-4">
               <div className="flex h-10 w-10 items-center justify-center rounded-full border border-titleBlue p-4 font-inter text-base font-bold text-titleBlue">
                 {index + 1}
@@ -57,7 +64,7 @@ export default function FormStep({ formError }: FormStepsProps) {
 
               <Input
                 name={`step[${index}].description`}
-                value={stepCard.description}
+                value={card.description}
                 onChange={(e) => updateStepDescription(index, e.target.value)}
                 placeholder="Step instructions"
                 disabled={false}

@@ -4,11 +4,11 @@ import { useState } from "react";
 import { Button, Input, TextField } from "react-aria-components";
 
 type PeopleCalculatorCreateProps = {
-  people?: number;
+  currentPeople?: number;
 };
 
-export default function PeopleCalculatorCreate({ people }: PeopleCalculatorCreateProps) {
-  const [peopleNumber, setPeopleNumber] = useState(people || 1);
+export default function PeopleCalculatorCreate({ currentPeople }: PeopleCalculatorCreateProps) {
+  const [peopleNumber, setPeopleNumber] = useState(currentPeople || 1);
 
   function handlePeopleCounter(newValue: number) {
     if (newValue <= 0 || newValue > 10) {

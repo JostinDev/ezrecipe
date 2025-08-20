@@ -1,14 +1,21 @@
 import { FieldError, Input, TextField } from "react-aria-components";
+import { useState } from "react";
 
 type FormRecipeTitleProps = {
   formError: string[] | undefined;
+  currentTitle?: string;
 };
-export default function FormRecipeTitle({ formError }: FormRecipeTitleProps) {
+export default function FormRecipeTitle({ formError, currentTitle }: FormRecipeTitleProps) {
+  const [title, setTitle] = useState(currentTitle ?? "");
+
   return (
     <div className="text-center">
-      <TextField isRequired name="recipeName">
+      <TextField isRequired>
         <Input
+          name="recipeName"
+          value={title}
           placeholder="New recipe"
+          onChange={(e) => setTitle(e.target.value)}
           className="w-full max-w-[400px] rounded-lg border border-dashed border-title bg-transparent p-2 text-center font-ptSerif text-[40px] text-title"
         ></Input>
         <div className="mt-2">

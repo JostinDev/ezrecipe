@@ -277,6 +277,209 @@ export async function createRecipe(prevState: any, formData: FormData) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function updateRecipe(prevState: any, formData: FormData) {
+  const { userId, redirectToSignIn } = await auth();
+  if (!userId) return redirectToSignIn();
+
+  console.log("RAW form data", formData);
+
+  // recipe id comes from a hidden input in the form
+  const recipeIdRaw = formData.get("recipeId");
+  const recipeId = Number(recipeIdRaw);
+  if (!recipeId || Number.isNaN(recipeId)) {
+    return {
+      errors: {
+        recipeName: [""],
+        peopleNumber: [""],
+        selectedFolder: [""],
+        steps: [""],
+        ingredientGroups: { 0: { title: "Invalid recipe id" } },
+      },
+    };
+  }
+
+  // Ownership check
+  const existing = await db.query.recipe.findFirst({
+    where: and(eq(schema.recipe.id, recipeId), eq(schema.recipe.userID, userId)),
+    columns: { id: true, userID: true },
+  });
+
+  console.log("EXISTING", existing);
+
+  if (!existing) {
+    return {
+      errors: {
+        recipeName: [""],
+        peopleNumber: [""],
+        selectedFolder: [""],
+        steps: [""],
+        ingredientGroups: { 0: { title: "Recipe not found or access denied" } },
+      },
+    };
+  }
+
+  // Validate form
+  const parsed = parseFormData(formData);
+  console.log("PARSED", parsed);
+
+  const validation = formSchema.safeParse(parsed);
+  if (!validation.success) {
+    type GroupErrorArray = {
+      title?: string;
+      ingredients?: {
+        amount?: string;
+        ingredient?: string;
+      }[];
+    };
+
+    const formated = z.formatError(validation.error);
+
+    let stepErrors: string[] = [];
+    const titleError: string[] = [];
+    const groupErrors: Record<number, GroupErrorArray> = {};
+
+    // STEPS
+    if (formated.steps) {
+      const stepKeys = Object.keys(formated.steps).filter(
+        (key): key is `${number}` => !isNaN(Number(key)),
+      );
+      const stepCount = stepKeys.length;
+      stepErrors = Array(stepCount).fill("");
+
+      for (const key of stepKeys) {
+        stepErrors[key] = formated.steps[0].description?._errors[0] ?? "";
+      }
+    }
+
+    // RECIPE NAME
+    if (formated.recipeName) {
+      titleError[0] = formated.recipeName?._errors[0];
+    }
+
+    // INGREDIENT GROUPS
+    if (formated.ingredientGroups) {
+      const ingredientGroupKeys = Object.keys(formated.ingredientGroups).filter(
+        (key): key is `${number}` => !isNaN(Number(key)),
+      );
+
+      for (const key of ingredientGroupKeys) {
+        const idx = Number(key);
+        const group = formated.ingredientGroups[idx];
+
+        const ingredients = parsed.ingredientGroups?.[idx]?.ingredients;
+        const ingredientsSize = ingredients
+          ? Object.keys(ingredients).filter((k) => !isNaN(Number(k))).length
+          : 0;
+
+        const ingredientsArray = Array.from({ length: ingredientsSize }, () => ({
+          amount: "",
+          ingredient: "",
+        }));
+
+        const titleErr = group?.title?._errors?.[0];
+
+        if (group?.ingredients) {
+          const ingredientKeys = Object.keys(group.ingredients).filter(
+            (k): k is `${number}` => !isNaN(Number(k)),
+          );
+
+          if (ingredientKeys.length > 0) {
+            ingredientKeys.forEach((k) => {
+              const ing = group.ingredients?.[Number(k)];
+              if (ing?.amount?._errors?.[0]) {
+                ingredientsArray[k].amount = ing?.amount?._errors?.[0];
+              }
+              if (ing?.ingredient?._errors?.[0]) {
+                ingredientsArray[k].ingredient = ing?.ingredient?._errors?.[0];
+              }
+            });
+          }
+        }
+
+        groupErrors[idx] = {
+          ...(titleErr ? { title: titleErr } : {}),
+          ...(ingredientsArray ? { ingredients: ingredientsArray } : {}),
+        };
+      }
+    }
+
+    return {
+      errors: {
+        recipeName: titleError,
+        peopleNumber: [""],
+        selectedFolder: [""],
+        steps: stepErrors,
+        ingredientGroups: groupErrors,
+      },
+    };
+  }
+
+  // ---------- Validated data
+  const { recipeName, peopleNumber, selectedFolder, steps, ingredientGroups } = validation.data;
+
+  // Persist atomically: update recipe; replace steps and ingredient groups + ingredients
+  await db.transaction(async (tx) => {
+    // 1) Update recipe core fields
+    await tx
+      .update(schema.recipe)
+      .set({
+        title: recipeName,
+        people: peopleNumber,
+        folderId: selectedFolder !== -1 ? selectedFolder : null,
+        // shareToken unchanged on update
+      })
+      .where(and(eq(schema.recipe.id, recipeId), eq(schema.recipe.userID, userId)));
+
+    // 2) Remove existing steps
+    await tx.delete(schema.step).where(eq(schema.step.recipeId, recipeId));
+
+    // 3) Remove existing ingredient groups and their ingredients
+    //    First collect group ids
+    const groups = await tx.query.ingredientGroup.findMany({
+      where: eq(schema.ingredientGroup.recipeId, recipeId),
+      columns: { id: true },
+    });
+    const groupIds = groups.map((g) => g.id);
+    if (groupIds.length) {
+      await tx
+        .delete(schema.ingredient)
+        .where(inArray(schema.ingredient.ingredientGroupId, groupIds));
+      await tx.delete(schema.ingredientGroup).where(eq(schema.ingredientGroup.recipeId, recipeId));
+    }
+
+    // 4) Insert new steps
+    if (steps?.length) {
+      await tx.insert(schema.step).values(
+        steps.map((s: { description: string }) => ({
+          recipeId,
+          description: s.description,
+        })),
+      );
+    }
+
+    // 5) Insert new groups + ingredients
+    for (const group of ingredientGroups ?? []) {
+      const [newGroup] = await tx
+        .insert(schema.ingredientGroup)
+        .values({ title: group.title, recipeId })
+        .returning();
+
+      if (group.ingredients?.length) {
+        await tx.insert(schema.ingredient).values(
+          group.ingredients.map((i) => ({
+            quantity: String(i.amount ?? ""),
+            unit: i.unit,
+            description: i.ingredient,
+            ingredientGroupId: newGroup.id,
+          })),
+        );
+      }
+    }
+  });
+
+  redirect(`/recipe/${recipeId}`);
+}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function createFolder(prevState: any, formData: FormData) {
   const { userId, redirectToSignIn } = await auth();
   if (!userId) return redirectToSignIn();

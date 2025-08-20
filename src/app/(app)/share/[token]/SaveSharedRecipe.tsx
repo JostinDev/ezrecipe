@@ -1,6 +1,6 @@
 "use client";
 import { Form } from "react-aria-components";
-import FormSubmitButton from "@/app/(app)/recipe/create/components/FormSubmitButton";
+import FormSubmitButton from "@/app/(app)/recipe/(crud)/components/FormSubmitButton";
 import { useActionState } from "react";
 import { saveSharedRecipe } from "@/server/mutations";
 
