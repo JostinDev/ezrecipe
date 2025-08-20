@@ -6,23 +6,36 @@ import chevron from "@/app/(app)/img/chevron_left.svg";
 import CardRecipe from "@/app/(app)/component/CardRecipe";
 import FormSubmitButton from "@/app/(app)/recipe/(crud)/components/FormSubmitButton";
 import { Checkbox, CheckboxGroup, FieldError, Form, Input, TextField } from "react-aria-components";
-import { useActionState } from "react";
-import { createFolder } from "@/server/mutations";
+import { useActionState, useState } from "react";
+import { createFolder, updateFolder } from "@/server/mutations";
 
 type FormFolderWrapperProps = {
   recipesWithoutFolder: { id: number; title: string }[];
+  folderTitle?: string;
+  recipesInFolder?: { id: number; title: string }[];
+  folderID: number;
 };
 
-export default function FormFolderWrapper({ recipesWithoutFolder }: FormFolderWrapperProps) {
-  const [state, formAction, isPending] = useActionState(createFolder, {
+export default function FormFolderWrapper({
+  recipesWithoutFolder,
+  folderTitle,
+  recipesInFolder,
+  folderID,
+}: FormFolderWrapperProps) {
+  const [state, formAction, isPending] = useActionState(folderTitle ? updateFolder : createFolder, {
     errors: {},
   });
+
+  const [title, setTitle] = useState(folderTitle ?? "");
+  const defaultValues = recipesInFolder?.map((r) => r.id.toString());
+
   return (
     <Form
       action={formAction}
       className="mx-auto w-full max-w-[1200px] px-2 pb-10 lg:px-5"
       validationErrors={state?.errors}
     >
+      <input name="folderID" defaultValue={folderID} className="hidden" />
       <div className="mx-auto w-full max-w-[1200px] px-5">
         <button className="flex gap-1">
           <Image src={chevron} alt="logo" width={20} height={20} />
@@ -34,6 +47,8 @@ export default function FormFolderWrapper({ recipesWithoutFolder }: FormFolderWr
         <div className="text-center">
           <TextField isRequired name="folderName">
             <Input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
               placeholder="New recipe"
               className="w-full max-w-[400px] rounded-lg border border-dashed border-title bg-transparent p-2 text-center font-ptSerif text-[40px] text-title"
             ></Input>
@@ -47,7 +62,21 @@ export default function FormFolderWrapper({ recipesWithoutFolder }: FormFolderWr
         <p className="font-inter text-sm text-body">Select recipes to add in your new folder</p>
 
         <div className="pt-4">
-          <CheckboxGroup name="recipes" className="flex flex-row flex-wrap gap-4">
+          <CheckboxGroup
+            defaultValue={defaultValues} // <-- use defaultValue, not defaultSelectedKeys
+            name="recipes"
+            className="flex flex-row flex-wrap gap-4"
+          >
+            {recipesInFolder?.map((recipe) => (
+              <Checkbox
+                isSelected={true}
+                className="group"
+                value={recipe.id.toString()}
+                key={recipe.id}
+              >
+                <CardRecipe recipeName={recipe.title} />
+              </Checkbox>
+            ))}
             {recipesWithoutFolder.map((recipe) => (
               <Checkbox className="group" value={recipe.id.toString()} key={recipe.id}>
                 <CardRecipe recipeName={recipe.title} />

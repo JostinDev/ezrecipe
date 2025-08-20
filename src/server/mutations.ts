@@ -656,3 +656,116 @@ export async function saveSharedRecipe(prevState: any, formData: FormData) {
   });
   redirect(`/recipe/${copiedRecipeID}`);
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function updateFolder(prevState: any, formData: FormData) {
+  const { userId, redirectToSignIn } = await auth();
+  if (!userId) return redirectToSignIn();
+
+  const formSchema = z.object({
+    folderID: z.coerce.number(),
+    folderName: z.coerce
+      .string()
+      .min(1, "Folder name is required")
+      .max(256, "Folder name is too long"),
+  });
+
+  const result = formSchema.safeParse(Object.fromEntries(formData.entries()));
+  if (!result.success) {
+    return { errors: result.error.flatten().fieldErrors };
+  }
+
+  const originalFolderID = result.data.folderID;
+
+  const folderName = result.data.folderName;
+  const recipeIds = formData
+    .getAll("recipes")
+    .map((v) => Number(v))
+    .filter(Number.isFinite);
+
+  console.log("DATA : ", result.data);
+  console.log("FOLDER NAME : ", folderName);
+  console.log("RECIPE IDs : ", recipeIds);
+
+  // perform updates in a transaction
+  await db.transaction(async (tx) => {
+    // 1) Ensure folder exists & belongs to user
+    const folder = await tx.query.folder.findFirst({
+      where: (tbl, { and, eq }) => and(eq(tbl.id, originalFolderID), eq(tbl.userID, userId)),
+      columns: { id: true },
+    });
+
+    if (!folder) {
+      throw new Error("Folder not found or not yours");
+    }
+
+    // 2) Update folder name
+    await tx
+      .update(schema.folder)
+      .set({ name: folderName })
+      .where(and(eq(schema.folder.id, originalFolderID), eq(schema.folder.userID, userId)));
+
+    // 3) If recipe IDs were provided, validate ownership & unfiled state
+    if (recipeIds.length > 0) {
+      await tx
+        .select({ id: schema.recipe.id })
+        .from(schema.recipe)
+        .where(
+          and(
+            inArray(schema.recipe.id, recipeIds),
+            eq(schema.recipe.userID, userId),
+            isNull(schema.recipe.folderId), // only assign recipes not in folders
+          ),
+        );
+
+      // assign recipes to this folder
+      await tx
+        .update(schema.recipe)
+        .set({ folderId: originalFolderID })
+        .where(inArray(schema.recipe.id, recipeIds));
+    }
+  });
+
+  // redirect to the updated folder page
+  redirect(`/folder/${originalFolderID}`);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function deleteFolder(prevState: any, formData: FormData) {
+  const { userId, redirectToSignIn } = await auth();
+  if (!userId) return redirectToSignIn();
+
+  // validate payload
+  const formSchema = z.object({
+    folderID: z.coerce.number(),
+  });
+
+  const parsed = formSchema.safeParse(Object.fromEntries(formData.entries()));
+  if (!parsed.success) {
+    return { errors: parsed.error.flatten().fieldErrors };
+  }
+
+  const folderID = parsed.data.folderID;
+
+  console.log("DATA : ", parsed.data);
+
+  await db.transaction(async (tx) => {
+    // ensure the folder exists and belongs to the current user
+    const folder = await tx.query.folder.findFirst({
+      where: (f, { and, eq }) => and(eq(f.id, folderID), eq(f.userID, userId)),
+      columns: { id: true },
+    });
+
+    if (!folder) {
+      throw new Error("Folder not found or unauthorized");
+    }
+
+    // 2) delete the folder
+    await tx
+      .delete(schema.folder)
+      .where(and(eq(schema.folder.id, folderID), eq(schema.folder.userID, userId)));
+  });
+
+  // back to the home (or wherever your list is)
+  redirect("/");
+}

@@ -147,3 +147,34 @@ export async function getRecipeByToken(token: string) {
     username: user.username ?? user.firstName ?? "Unknown",
   };
 }
+
+// Return the recipes that belong to a given folder for the current user
+export async function getRecipesInFolder(folderId: number) {
+  const { userId, redirectToSignIn } = await auth();
+  if (!userId) return redirectToSignIn();
+
+  return await db.query.recipe.findMany({
+    where: (r, { and, eq }) => and(eq(r.userID, userId), eq(r.folderId, folderId)),
+    // pick what the page needs; add more columns if necessary
+    columns: { id: true, title: true, people: true },
+  });
+}
+
+// Return the folder title if the folder belongs to the current user
+export async function getFolderTitle(folderId: number) {
+  const { userId, redirectToSignIn } = await auth();
+  if (!userId) return redirectToSignIn();
+
+  const folder = await db.query.folder.findFirst({
+    where: (f, { and, eq }) => and(eq(f.id, folderId), eq(f.userID, userId)),
+    columns: { name: true },
+  });
+
+  if (!folder) {
+    // You can choose to redirect or throw:
+    // redirect("/");
+    throw new Error("Folder not found or unauthorized");
+  }
+
+  return folder.name;
+}

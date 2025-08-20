@@ -31,7 +31,7 @@ export default async function Recipe({ params }: RecipeProps) {
           </p>
         </div>
 
-        <RecipeOptions recipeID={recipeID} />
+        <RecipeOptions shareToken={recipe.shareToken} recipeID={recipeID} />
       </div>
 
       <RecipeDisplayer

@@ -8,11 +8,12 @@ import DeleteRecipeModal from "@/app/(app)/recipe/[recipeID]/Component/DeleteRec
 
 type RecipeOptionProps = {
   recipeID: number;
+  shareToken: string;
 };
 
-export default function RecipeOptions({ recipeID }: RecipeOptionProps) {
+export default function RecipeOptions({ recipeID, shareToken }: RecipeOptionProps) {
   const [copied, setCopied] = useState("Sharing link");
-  const link = "https://ezrecipe.dev/sharing/08anudasudas89nasd";
+  const link = `https://ezrecipe.dev/sharing/${shareToken}`;
 
   function copyLink() {
     navigator.clipboard.writeText(link).then(() => {

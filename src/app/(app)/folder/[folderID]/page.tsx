@@ -4,6 +4,7 @@ import Image from "next/image";
 import chevron from "@/app/(app)/img/chevron_left.svg";
 
 import CardRecipe from "@/app/(app)/component/CardRecipe";
+import FolderOptions from "@/app/(app)/folder/[folderID]/component/FolderOptions";
 
 type FolderProps = {
   params: Promise<{ folderID: string }>;
@@ -24,10 +25,17 @@ export default async function Folder({ params }: FolderProps) {
         </Link>
       </button>
       <div className="text-center">
-        <h1 className="font-ptSerif text-[40px] text-title">{recipes?.name}</h1>
+        <div className="flex items-center justify-between">
+          <div className="mx-auto self-center text-center">
+            <h1 className="font-ptSerif text-[40px] text-title">{recipes?.name}</h1>
+          </div>
+
+          <FolderOptions folderID={folderID} />
+        </div>
+
         <div className="mt-10 flex flex-wrap gap-4">
           {recipes?.recipes.map((recipe) => (
-            <Link href={`/recipe/${recipe.id}`} key={recipe.id}>
+            <Link className="font-inter text-title" href={`/recipe/${recipe.id}`} key={recipe.id}>
               <CardRecipe recipeName={recipe.title} />
             </Link>
           ))}
