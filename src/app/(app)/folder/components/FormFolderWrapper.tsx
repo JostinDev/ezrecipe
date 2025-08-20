@@ -13,7 +13,7 @@ type FormFolderWrapperProps = {
   recipesWithoutFolder: { id: number; title: string }[];
   folderTitle?: string;
   recipesInFolder?: { id: number; title: string }[];
-  folderID: number;
+  folderID?: number;
 };
 
 export default function FormFolderWrapper({
