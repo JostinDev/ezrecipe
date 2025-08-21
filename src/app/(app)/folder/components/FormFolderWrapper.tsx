@@ -32,12 +32,12 @@ export default function FormFolderWrapper({
   return (
     <Form
       action={formAction}
-      className="mx-auto w-full max-w-[1200px] px-2 pb-10 lg:px-5"
+      className="mx-auto w-full max-w-[1200px] pb-10"
       validationErrors={state?.errors}
     >
       <input name="folderID" defaultValue={folderID} className="hidden" />
-      <div className="mx-auto w-full max-w-[1200px] px-5">
-        <button className="flex gap-1">
+      <div className="mx-auto w-full max-w-[1200px]">
+        <button className="mb-4 flex items-center gap-1">
           <Image src={chevron} alt="logo" width={20} height={20} />
           <Link href="/" prefetch={true} className="font-inter text-xl text-title">
             Back

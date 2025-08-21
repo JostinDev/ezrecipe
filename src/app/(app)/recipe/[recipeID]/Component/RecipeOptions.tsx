@@ -5,6 +5,7 @@ import cog from "@/app/(app)/img/cog.svg";
 import copy from "@/app/(app)/img/clipboard-copy.svg";
 import { useState } from "react";
 import DeleteRecipeModal from "@/app/(app)/recipe/[recipeID]/Component/DeleteRecipeModal";
+import Link from "next/link";
 
 type RecipeOptionProps = {
   recipeID: number;
@@ -37,7 +38,9 @@ export default function RecipeOptions({ recipeID, shareToken }: RecipeOptionProp
         </OverlayArrow>
         <Dialog>
           <div className="flex flex-col gap-4">
-            <p>Edit</p>
+            <Link className="font-inter text-title" href={`/recipe/edit/${recipeID}`}>
+              Edit
+            </Link>
             <div>
               <p className="font-inter text-title">{copied}</p>
               <div className="mt-1">

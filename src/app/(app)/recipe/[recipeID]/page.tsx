@@ -16,8 +16,8 @@ export default async function Recipe({ params }: RecipeProps) {
   const recipe = await getRecipeById(recipeID);
 
   return (
-    <div className="mx-auto w-full max-w-[1200px] px-5">
-      <button className="flex gap-1">
+    <div className="mx-auto w-full max-w-[1200px]">
+      <button className="mb-4 flex items-center gap-1">
         <Image src={chevron} alt="logo" width={20} height={20} />
         <Link href="/" prefetch={true} className="font-inter text-xl text-title">
           Back

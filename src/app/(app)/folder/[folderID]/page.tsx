@@ -17,8 +17,8 @@ export default async function Folder({ params }: FolderProps) {
   const recipes = await getFolderWithRecipes(folderID);
 
   return (
-    <div className="mx-auto w-full max-w-[1200px] px-5">
-      <button className="flex gap-1">
+    <div className="mx-auto w-full max-w-[1200px]">
+      <button className="mb-4 flex items-center gap-1">
         <Image src={chevron} alt="logo" width={20} height={20} />
         <Link href="/" prefetch={true} className="font-inter text-xl text-title">
           Back

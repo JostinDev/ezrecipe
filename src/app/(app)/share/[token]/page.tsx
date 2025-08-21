@@ -14,7 +14,7 @@ export default async function Share({ params }: FolderProps) {
   console.log(title);
 
   return (
-    <div className="mx-auto w-full max-w-[1200px] px-5">
+    <div className="mx-auto w-full max-w-[1200px]">
       <h2 className="pt-12 font-ptSerif text-[32px] text-title">
         {username} is sharing the recipe {title} with you
       </h2>

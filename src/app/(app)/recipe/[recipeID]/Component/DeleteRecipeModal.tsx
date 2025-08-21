@@ -17,7 +17,7 @@ export default function DeleteRecipeModal({ recipeID }: RecipeOptionProps) {
       <Button className="w-fit rounded-md text-left font-inter text-red-500 transition-colors hover:text-red-600">
         Delete recipe
       </Button>
-      <Modal className="bg-size-[200px_200px] w-[400px] flex-col rounded-lg bg-background bg-[url(/noisy-texture-200x200.png)] bg-repeat p-4">
+      <Modal className="bg-size-[200px_200px] mx-4 w-full max-w-[400px] flex-col rounded-lg bg-background bg-[url(/noisy-texture-200x200.png)] bg-repeat p-4">
         <Dialog>
           <Form action={formAction} className="flex h-full flex-col justify-between">
             <span className="hidden">{state.errors.recipeID}</span>

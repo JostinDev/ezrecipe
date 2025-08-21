@@ -23,7 +23,9 @@ export default function FolderOptions({ folderID }: RecipeOptionProps) {
         </OverlayArrow>
         <Dialog>
           <div className="flex flex-col gap-4">
-            <Link href={`/folder/edit/${folderID}`}>Edit</Link>
+            <Link className="font-inter text-title" href={`/folder/edit/${folderID}`}>
+              Edit
+            </Link>
             <DeleteFolderModal folderID={folderID} />
           </div>
         </Dialog>

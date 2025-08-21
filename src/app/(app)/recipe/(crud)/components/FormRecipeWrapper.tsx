@@ -26,7 +26,7 @@ export default function FormRecipe({ folders, recipe }: FormRecipeProps) {
   });
 
   return (
-    <Form action={formAction} className="mx-auto w-full max-w-[1200px] px-2 pb-10 lg:px-5">
+    <Form action={formAction} className="mx-auto w-full max-w-[1200px]">
       <input className="hidden" name={"recipeId"} defaultValue={recipe?.id} />
       <BackToHomeButton />
       <FormRecipeTitle currentTitle={recipe?.title} formError={state.errors?.recipeName} />

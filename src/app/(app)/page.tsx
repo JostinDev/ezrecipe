@@ -9,7 +9,7 @@ export default async function Home() {
   const { recipesWithoutFolder, folders } = await getRecipes();
 
   return (
-    <div className="mx-auto w-full max-w-[1200px] px-5">
+    <div className="mx-auto w-full max-w-[1200px]">
       <h2 className="font-ptSerif text-[32px] text-title">Folders</h2>
       <div className="flex flex-row flex-wrap items-center gap-4 pt-4">
         {folders.map((folder) => (
