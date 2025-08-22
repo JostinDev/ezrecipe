@@ -39,7 +39,7 @@ export default function FormFolderWrapper({
       <div className="mx-auto w-full max-w-[1200px]">
         <button className="mb-4 flex items-center gap-1">
           <Image src={chevron} alt="logo" width={20} height={20} />
-          <Link href="/" prefetch={true} className="font-inter text-xl text-title">
+          <Link href="/" prefetch={true} className="font-inter text-lg text-title sm:text-xl">
             Back
           </Link>
         </button>
@@ -49,8 +49,8 @@ export default function FormFolderWrapper({
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="New recipe"
-              className="w-full max-w-[400px] rounded-lg border border-dashed border-title bg-transparent p-2 text-center font-ptSerif text-[40px] text-title"
+              placeholder="New folder"
+              className="w-full max-w-[400px] rounded-lg border border-dashed border-title bg-transparent p-2 text-center font-ptSerif text-[30px] text-title sm:text-[40px]"
             ></Input>
             <div className="mt-2">
               <FieldError className="font-inter text-base text-error" />
@@ -58,7 +58,9 @@ export default function FormFolderWrapper({
           </TextField>
         </div>
 
-        <h2 className="pt-12 font-ptSerif text-[32px] text-title">Recipes without folder</h2>
+        <h2 className="pt-12 font-ptSerif text-[26px] text-title sm:text-[32px]">
+          Recipes without folder
+        </h2>
         <p className="font-inter text-sm text-body">Select recipes to add in your new folder</p>
 
         <div className="pt-4">

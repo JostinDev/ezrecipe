@@ -7,7 +7,7 @@ export default function BackToHomeButton() {
   return (
     <Button type="button" className="mb-4 flex items-center gap-1">
       <Image src={chevron} alt="logo" width={20} height={20} />
-      <Link href="/" prefetch={true} className="font-inter text-xl text-title">
+      <Link href="/" prefetch={true} className="font-inter text-lg text-title sm:text-xl">
         Back
       </Link>
     </Button>

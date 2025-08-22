@@ -16,7 +16,7 @@ export default function FormRecipeTitle({ formError, currentTitle }: FormRecipeT
           value={title}
           placeholder="New recipe"
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full max-w-[400px] rounded-lg border border-dashed border-title bg-transparent p-2 text-center font-ptSerif text-[40px] text-title"
+          className="w-full max-w-[400px] rounded-lg border border-dashed border-title bg-transparent p-2 text-center font-ptSerif text-[30px] text-title sm:text-[40px]"
         ></Input>
         <div className="mt-2">
           <FieldError className="font-inter text-base text-error" />

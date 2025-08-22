@@ -7,9 +7,9 @@ type RootLayoutProps = {
 
 export default async function AppLayout({ children }: RootLayoutProps) {
   return (
-    <div>
+    <div className="px-5">
       <Header />
-      <div className="mt-10 px-4 pb-10 md:mt-24">{children}</div>
+      <div className="mt-10 pb-10 md:mt-24">{children}</div>
     </div>
   );
 }

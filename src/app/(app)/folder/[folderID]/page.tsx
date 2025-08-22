@@ -18,22 +18,28 @@ export default async function Folder({ params }: FolderProps) {
 
   return (
     <div className="mx-auto w-full max-w-[1200px]">
-      <button className="mb-4 flex items-center gap-1">
-        <Image src={chevron} alt="logo" width={20} height={20} />
-        <Link href="/" prefetch={true} className="font-inter text-xl text-title">
-          Back
-        </Link>
-      </button>
-      <div className="text-center">
-        <div className="flex items-center justify-between">
-          <div className="mx-auto self-center text-center">
-            <h1 className="font-ptSerif text-[40px] text-title">{recipes?.name}</h1>
+      <div>
+        <div className="flex flex-col items-start sm:flex-row sm:items-center">
+          <button className="flex items-center gap-1">
+            <Image src={chevron} alt="logo" width={20} height={20} />
+            <Link href="/" prefetch={true} className="font-inter text-lg text-title sm:text-xl">
+              Back
+            </Link>
+          </button>
+          <div className="mt-4 flex w-full items-center justify-center sm:mt-0">
+            <div className="flex flex-col items-center">
+              <div className="flex gap-4">
+                <h1 className="font-ptSerif text-[30px] text-title sm:text-[40px]">
+                  {recipes?.name}
+                </h1>
+                <FolderOptions folderID={folderID} />
+              </div>
+            </div>
           </div>
-
-          <FolderOptions folderID={folderID} />
         </div>
 
-        <div className="mt-10 flex flex-wrap gap-4">
+        <h2 className="pt-12 font-ptSerif text-[26px] text-title sm:text-[32px]">Recipes</h2>
+        <div className="mt-4 flex flex-wrap gap-4">
           {recipes?.recipes.map((recipe) => (
             <Link className="font-inter text-title" href={`/recipe/${recipe.id}`} key={recipe.id}>
               <CardRecipe recipeName={recipe.title} />

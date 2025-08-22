@@ -31,13 +31,13 @@ export default function FormRecipe({ folders, recipe }: FormRecipeProps) {
       <BackToHomeButton />
       <FormRecipeTitle currentTitle={recipe?.title} formError={state.errors?.recipeName} />
       <FolderSelector currentFolderID={recipe?.folderId} folders={folders} />
-      <h2 className="pt-12 font-ptSerif text-[32px] text-title">Ingredients</h2>
+      <h2 className="pt-12 font-ptSerif text-[26px] text-title sm:text-[32px]">Ingredients</h2>
       <PeopleCalculatorCreate currentPeople={recipe?.people} />
       <CardIngredientCreate
         currentGroup={recipe?.ingredientGroups}
         formError={state.errors?.ingredientGroups}
       />
-      <h2 className="pt-12 font-ptSerif text-[32px] text-title">Steps</h2>
+      <h2 className="pt-12 font-ptSerif text-[26px] text-title sm:text-[32px]">Steps</h2>
       <FormStep currentSteps={recipe?.steps} formError={state.errors?.steps} />
       <FormSubmitButton isFormPending={isPending} />
     </Form>

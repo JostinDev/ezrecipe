@@ -28,7 +28,7 @@ export default function FolderSelector({ folders, currentFolderID }: CardStepCre
         isRequired
         name="selectedFolder"
         placeholder="Add folder"
-        className="w-full max-w-60 rounded-md border border-dashed border-titleBlue bg-transparent font-inter text-2xl text-body"
+        className="w-full max-w-60 rounded-md border border-dashed border-titleBlue bg-transparent font-inter text-xl text-body sm:text-2xl"
       >
         <Button className="flex w-full justify-between p-2">
           <SelectValue className="mx-auto items-center justify-center" />

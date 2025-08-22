@@ -5,9 +5,9 @@ import { Button } from "react-aria-components";
 
 export default function Header() {
   return (
-    <div className="mx-auto flex max-w-[1536px] flex-row items-center justify-between px-5 pt-6">
+    <div className="mx-auto flex max-w-[1400px] flex-row items-center justify-between pt-6">
       <Link href="/">
-        <h1 className="font-ptSerif text-4xl text-title md:text-5xl">ezrecipe</h1>
+        <h1 className="font-ptSerif text-[42px] text-title sm:text-5xl">ezrecipe</h1>
       </Link>
       <div className="flex flex-row gap-8 pt-2">
         <ClerkProvider>
