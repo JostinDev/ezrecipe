@@ -15,6 +15,7 @@ import {
 import cross from "@/app/(app)/img/cross.svg";
 import Image from "next/image";
 import { Ingredient } from "@/app/(app)/types/types";
+import add from "@/app/(app)/img/plus_button_blue.svg";
 
 type IngredientRowProps = {
   ingredientGroup: number;
@@ -178,9 +179,10 @@ export default function IngredientRowCreate({
 
       <Button
         onClick={() => addIngredientRow()}
-        className="h-10 w-full rounded-md border border-dashed border-titleBlue bg-transparent p-2"
+        className="flex h-10 w-full items-center justify-center gap-2 rounded-md border border-titleBlue bg-transparent p-2"
       >
-        <p className="font-inter text-base text-titleBlue">Add a new ingredient</p>
+        <Image src={add} width={24} height={24} alt={"add ingredient"} />
+        <p className="font-inter text-base text-titleBlue">Add an ingredient</p>
       </Button>
     </div>
   );

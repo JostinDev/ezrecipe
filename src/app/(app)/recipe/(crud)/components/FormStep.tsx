@@ -53,7 +53,7 @@ export default function FormStep({ formError, currentSteps }: FormStepsProps) {
           <TextField
             isRequired
             key={card.uid}
-            className="relative flex w-full flex-col rounded-lg bg-pastelBlue p-5 text-titleBlue drop-shadow-[4px_4px_0px] transition"
+            className="relative flex w-full flex-col rounded-lg bg-pastelBlue p-5 text-titleBlue shadow-[4px_4px_0px_#263332] transition"
           >
             {/* Hidden field tells the server this row maps to an existing DB row */}
             {card.id != null && <input type="hidden" name={`step[${index}].id`} value={card.id} />}
@@ -93,7 +93,7 @@ export default function FormStep({ formError, currentSteps }: FormStepsProps) {
           className="bg-size-[200px_200px] relative z-20 flex w-full items-center gap-4 rounded-lg border border-title bg-background bg-[url(/noisy-texture-200x200.png)] bg-repeat p-5"
         >
           <Image src={add} alt="logo" width={40} height={40} />
-          <p className="font-inter text-base font-bold text-title">Add a new Step</p>
+          <p className="font-inter text-base font-bold text-title">Add a Step</p>
         </Button>
         <div className="absolute left-1 top-1 z-10 h-full w-full rounded-[8px] border border-title p-3 transition-all"></div>
       </div>

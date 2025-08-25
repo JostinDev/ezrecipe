@@ -63,7 +63,7 @@ export default function FormCardIngredient({ formError, currentGroup }: FormCard
       {ingredientGroupCards.map((card, index) => (
         <div
           key={card.uid}
-          className="relative flex w-full flex-col rounded-lg bg-pastelBlue p-5 text-titleBlue drop-shadow-[4px_4px_0px] transition sm:max-w-[400px]"
+          className="relative flex w-full flex-col rounded-lg bg-pastelBlue p-5 text-titleBlue shadow-[4px_4px_0px_#263332] transition sm:max-w-[400px]"
         >
           <TextField isRequired>
             <Input
@@ -100,7 +100,7 @@ export default function FormCardIngredient({ formError, currentGroup }: FormCard
           onClick={() => addIngredientGroupCard()}
           className="bg-size-[200px_200px] relative z-20 flex w-full flex-col items-center gap-4 rounded-lg border border-title bg-background bg-[url(/noisy-texture-200x200.png)] bg-repeat p-5"
         >
-          <p className="font-inter text-base font-bold text-title">Add a new ingredient group</p>
+          <p className="font-inter text-base font-bold text-title">Add an ingredient group</p>
           <Image src={add} alt="logo" width={40} height={40} />
         </Button>
         <div className="absolute left-1 top-1 z-10 h-full w-full rounded-[8px] border border-title p-3 transition-all"></div>
