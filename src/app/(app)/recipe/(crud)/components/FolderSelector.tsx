@@ -30,7 +30,7 @@ export default function FolderSelector({ folders, currentFolderID }: CardStepCre
         placeholder="Add folder"
         className="w-full max-w-60 rounded-md border border-dashed border-titleBlue bg-transparent font-inter text-xl text-body sm:text-2xl"
       >
-        <Button className="flex w-full justify-between p-2">
+        <Button className="flex w-full justify-between rounded-md p-2">
           <SelectValue className="mx-auto items-center justify-center" />
           <span aria-hidden="true">▼</span>
         </Button>

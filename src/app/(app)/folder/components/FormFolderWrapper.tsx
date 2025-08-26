@@ -1,13 +1,11 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
-import chevron from "@/app/(app)/img/chevron_left.svg";
 import CardRecipe from "@/app/(app)/component/CardRecipe";
 import FormSubmitButton from "@/app/(app)/recipe/(crud)/components/FormSubmitButton";
 import { Checkbox, CheckboxGroup, FieldError, Form, Input, TextField } from "react-aria-components";
 import { useActionState, useState } from "react";
 import { createFolder, updateFolder } from "@/server/mutations";
+import BackButton from "@/app/(app)/component/BackButton";
 
 type FormFolderWrapperProps = {
   recipesWithoutFolder: { id: number; title: string }[];
@@ -37,14 +35,9 @@ export default function FormFolderWrapper({
     >
       <input name="folderID" defaultValue={folderID} className="hidden" />
       <div className="mx-auto w-full max-w-[1200px]">
-        <button className="mb-4 flex items-center gap-1">
-          <Image src={chevron} alt="logo" width={20} height={20} />
-          <Link href="/" prefetch={true} className="font-inter text-lg text-title sm:text-xl">
-            Back
-          </Link>
-        </button>
+        <BackButton></BackButton>
 
-        <div className="text-center">
+        <div className="mt-4 text-center">
           <TextField isRequired name="folderName">
             <Input
               value={title}

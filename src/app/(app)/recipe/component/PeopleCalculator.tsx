@@ -21,14 +21,12 @@ export default function PeopleCalculator({ people, onSetPeopleNumber }: PeopleCa
 
   return (
     <div className="mt-2 flex items-center gap-2">
-      <Image src={user} alt="logo" width={24} height={24} />
-
-      <Button onClick={() => handlePeopleCounter(people - 1)}>
+      <Image src={user} alt="logo" width={24} height={24} />x
+      <Button className="rounded-full" onClick={() => handlePeopleCounter(people - 1)}>
         <Image src={peopleMinus} width={32} height={32} alt={"removePeople"}></Image>
       </Button>
       <p className="w-5 text-center font-inter text-xl text-body">{people}</p>
-
-      <Button onClick={() => handlePeopleCounter(people + 1)}>
+      <Button className="rounded-full" onClick={() => handlePeopleCounter(people + 1)}>
         <Image src={peoplePlus} width={32} height={32} alt={"removePeople"}></Image>
       </Button>
     </div>

@@ -20,10 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${ptSerif.variable} scroll-smooth bg-background`}>
-        <div className="bg-size-[200px_200px] min-h-svh bg-[url(/noisy-texture-200x200.png)] bg-repeat">
-          {children}
-        </div>
+      <body className={`${inter.variable} ${ptSerif.variable} scroll-smooth`}>
+        <div className="fixed inset-0 z-[-100] bg-background bg-[url(/noisy-texture-200x200.png)] bg-[length:200px_200px] bg-repeat"></div>
+        {children}
       </body>
     </html>
   );

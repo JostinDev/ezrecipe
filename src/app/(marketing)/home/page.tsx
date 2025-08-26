@@ -4,8 +4,8 @@ import SignInLandingPageButton from "./SignInLandingPageButton";
 
 export default function Home() {
   return (
-    <div className="container mx-auto px-5">
-      <div className="flex h-screen flex-col items-center justify-center">
+    <div className="container mx-auto overflow-hidden px-5">
+      <div style={{ height: "100dvh" }} className="flex h-dvh flex-col items-center justify-center">
         <h1 className="mb-8 text-center font-ptSerif text-5xl font-bold text-title sm:text-6xl md:text-7xl">
           Welcome to ezrecipe
         </h1>

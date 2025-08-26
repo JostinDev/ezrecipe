@@ -12,7 +12,7 @@ type RecipeOptionProps = {
 export default function FolderOptions({ folderID }: RecipeOptionProps) {
   return (
     <DialogTrigger>
-      <Button>
+      <Button className="h-fit w-fit rounded-full p-2">
         <Image src={cog} width={30} height={30} alt={"option"} />
       </Button>
       <Popover className="editOptions">

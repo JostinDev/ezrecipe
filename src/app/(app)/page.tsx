@@ -13,7 +13,12 @@ export default async function Home() {
       <h2 className="font-ptSerif text-[26px] text-title sm:text-[32px]">Folders</h2>
       <div className="flex flex-row flex-wrap items-center gap-4 pt-4">
         {folders.map((folder) => (
-          <Link href={`/folder/${folder.folderId}`} prefetch={true} key={folder.folderId}>
+          <Link
+            className="rounded-lg"
+            href={`/folder/${folder.folderId}`}
+            prefetch={true}
+            key={folder.folderId}
+          >
             <CardFolder key={folder.folderId} folderName={folder.folderName} count={folder.count} />
           </Link>
         ))}
@@ -34,7 +39,12 @@ export default async function Home() {
       <p className="font-inter text-sm text-body">Recipes without a folder</p>
       <div className="flex flex-row flex-wrap gap-4 pt-4">
         {recipesWithoutFolder.map((recipe) => (
-          <Link href={`/recipe/${recipe.id}`} prefetch={true} key={recipe.id}>
+          <Link
+            className="rounded-lg"
+            href={`/recipe/${recipe.id}`}
+            prefetch={true}
+            key={recipe.id}
+          >
             <CardRecipe recipeName={recipe.title} />
           </Link>
         ))}

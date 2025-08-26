@@ -9,10 +9,10 @@ import FolderSelector from "./FolderSelector";
 import FormStep from "./FormStep";
 import FormRecipeTitle from "./FormRecipeTitle";
 import FormSubmitButton from "./FormSubmitButton";
-import BackToHomeButton from "./BackToHomeButton";
 
 import { RecipeData } from "@/app/(app)//types/types";
 import { Folder } from "@/app/(app)//types/types";
+import BackButton from "@/app/(app)/component/BackButton";
 
 type FormRecipeProps = {
   folders: Folder[];
@@ -28,7 +28,7 @@ export default function FormRecipe({ folders, recipe }: FormRecipeProps) {
   return (
     <Form action={formAction} className="mx-auto w-full max-w-[1200px]">
       <input className="hidden" name={"recipeId"} defaultValue={recipe?.id} />
-      <BackToHomeButton />
+      <BackButton></BackButton>
       <FormRecipeTitle currentTitle={recipe?.title} formError={state.errors?.recipeName} />
       <FolderSelector currentFolderID={recipe?.folderId} folders={folders} />
       <h2 className="pt-12 font-ptSerif text-[26px] text-title sm:text-[32px]">Ingredients</h2>

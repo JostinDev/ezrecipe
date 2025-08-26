@@ -129,7 +129,7 @@ export default function IngredientRowCreate({
                 placeholder="Unit"
                 className="h-10 w-[70px] rounded-md border border-dashed border-titleBlue bg-transparent"
               >
-                <Button className="flex w-full justify-between p-2">
+                <Button className="flex w-full justify-between rounded-md p-2">
                   <SelectValue />
                   <span aria-hidden="true">▼</span>
                 </Button>
