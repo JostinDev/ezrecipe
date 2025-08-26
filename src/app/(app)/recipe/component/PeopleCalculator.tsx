@@ -21,7 +21,7 @@ export default function PeopleCalculator({ people, onSetPeopleNumber }: PeopleCa
 
   return (
     <div className="mt-2 flex items-center gap-2">
-      <Image src={user} alt="logo" width={24} height={24} />x
+      <Image src={user} alt="logo" width={24} height={24} />
       <Button className="rounded-full" onClick={() => handlePeopleCounter(people - 1)}>
         <Image src={peopleMinus} width={32} height={32} alt={"removePeople"}></Image>
       </Button>
