@@ -28,7 +28,7 @@ export default function RecipeDisplayer({ recipePeople, ingredientGroups, steps 
 
       <PeopleCalculator onSetPeopleNumber={setPeopleNumber} people={peopleNumber} />
 
-      <div className="flex flex-wrap gap-10 pt-4">
+      <div className="flex flex-col flex-wrap gap-5 pt-4 md:flex-row md:gap-10">
         {ingredientGroups.map((ingredientGroup) => (
           <CardIngredient
             key={ingredientGroup.id}
@@ -42,7 +42,7 @@ export default function RecipeDisplayer({ recipePeople, ingredientGroups, steps 
 
       <h2 className="pt-12 font-ptSerif text-[26px] text-title sm:text-[32px]">Steps</h2>
 
-      <div className="flex flex-col gap-10 pt-4">
+      <div className="flex flex-col gap-5 pt-4 md:gap-10">
         {steps.map((step, index) => (
           <CardStep key={step.id} stepDescription={step.description} stepIndex={index} />
         ))}

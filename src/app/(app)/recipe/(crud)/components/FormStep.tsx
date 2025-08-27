@@ -48,7 +48,7 @@ export default function FormStep({ formError, currentSteps }: FormStepsProps) {
 
   return (
     <div>
-      <div className="flex flex-col gap-10 pt-4">
+      <div className="flex flex-col flex-wrap gap-5 pt-4 md:flex-row md:gap-10">
         {stepCards.map((card, index) => (
           <TextField
             isRequired
@@ -86,7 +86,7 @@ export default function FormStep({ formError, currentSteps }: FormStepsProps) {
         ))}
       </div>
 
-      <div className="relative mt-10">
+      <div className="relative mt-5 md:mt-10">
         <Button
           type="button"
           onClick={() => addStep()}

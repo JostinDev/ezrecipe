@@ -59,11 +59,11 @@ export default function FormCardIngredient({ formError, currentGroup }: FormCard
   };
 
   return (
-    <div className="flex flex-wrap gap-10 pt-4">
+    <div className="flex flex-col flex-wrap gap-5 pt-4 md:flex-row md:gap-10">
       {ingredientGroupCards.map((card, index) => (
         <div
           key={card.uid}
-          className="relative flex w-full flex-col rounded-lg bg-pastelBlue p-5 text-titleBlue shadow-[4px_4px_0px_#263332] transition sm:max-w-[400px]"
+          className="relative flex w-full flex-col rounded-lg bg-pastelBlue p-5 text-titleBlue shadow-[4px_4px_0px_#263332] transition md:max-w-[400px]"
         >
           <TextField isRequired>
             <Input

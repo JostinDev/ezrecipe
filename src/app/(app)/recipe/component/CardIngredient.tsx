@@ -16,7 +16,7 @@ export default function CardIngredient({
   basePeopleNumber,
 }: CardIngredientProps) {
   return (
-    <div className="flex w-full max-w-[300px] flex-col rounded-lg bg-pastelBlue p-5 text-titleBlue shadow-[4px_4px_0px_#343638] transition">
+    <div className="flex w-full flex-col rounded-lg bg-pastelBlue p-5 text-titleBlue shadow-[4px_4px_0px_#343638] transition md:max-w-[300px]">
       <p className="mb-4 font-inter text-base font-bold text-titleBlue">{ingredientGroupTitle}</p>
       <div className="flex flex-col gap-2">
         {ingredients.map((ingredient) => (
