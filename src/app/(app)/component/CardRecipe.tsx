@@ -1,6 +1,6 @@
 import Image from "next/image";
 import chef from "../img/chef_blue.svg";
-import chefSelected from "../img/chef_pink.svg";
+import chefChecked from "../img/chef_pink_checked.svg";
 
 type CardRecipeProps = {
   recipeName: string;
@@ -19,7 +19,7 @@ export default function CardRecipe({ recipeName }: CardRecipeProps) {
         />
         <Image
           className="hidden group-data-[selected=true]:block"
-          src={chefSelected}
+          src={chefChecked}
           alt="logo"
           width={24}
           height={24}

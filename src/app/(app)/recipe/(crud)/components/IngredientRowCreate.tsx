@@ -27,7 +27,7 @@ type IngredientRowProps = {
 type IngredientRow = {
   uid: number; // local stable key for React
   id?: number; // DB id if existing
-  amount: number;
+  amount: string;
   unit: string;
   ingredient: string;
 };
@@ -55,17 +55,17 @@ export default function IngredientRowCreate({
   const initialIngredientRows: IngredientRow[] = currentIngredients?.map((ing, i) => ({
     uid: i, // local key 0..n-1
     id: ing.id, // DB id (tells server to update)
-    amount: Number(ing.quantity ?? 0),
+    amount: ing.quantity?.toString() ?? "",
     unit: ing.unit ?? "unit",
     ingredient: ing.description ?? "",
-  })) ?? [{ uid: 0, amount: 0, unit: "unit", ingredient: "" }];
+  })) ?? [{ uid: 0, amount: "", unit: "unit", ingredient: "" }];
 
   console.log("initialIngredientRows", initialIngredientRows);
 
   const [uidCounter, setUidCounter] = useState(initialIngredientRows.length);
   const [ingredientRow, setIngredientRow] = useState<IngredientRow[]>(initialIngredientRows);
 
-  const updateIngredientAmout = (index: number, newAmount: number) => {
+  const updateIngredientAmount = (index: number, newAmount: string) => {
     setIngredientRow((prev) =>
       prev.map((row, i) => (i === index ? { ...row, amount: newAmount } : row)),
     );
@@ -82,7 +82,7 @@ export default function IngredientRowCreate({
   const addIngredientRow = () => {
     setIngredientRow((prev) => [
       ...prev,
-      { uid: uidCounter, amount: 0, unit: "unit", ingredient: "" }, // no DB id => new
+      { uid: uidCounter, amount: "", unit: "unit", ingredient: "" }, // no DB id => new
     ]);
     setUidCounter((c) => c + 1);
   };
@@ -111,8 +111,7 @@ export default function IngredientRowCreate({
             >
               <Input
                 value={row.amount}
-                onChange={(e) => updateIngredientAmout(index, Number(e.target.value))}
-                inputMode="numeric"
+                onChange={(e) => updateIngredientAmount(index, e.target.value)}
                 className="h-10 w-full rounded-md border border-dashed border-titleBlue bg-transparent p-2"
                 placeholder="Amount"
               />
