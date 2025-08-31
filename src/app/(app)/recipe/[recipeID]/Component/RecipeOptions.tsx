@@ -14,7 +14,7 @@ type RecipeOptionProps = {
 
 export default function RecipeOptions({ recipeID, shareToken }: RecipeOptionProps) {
   const [copied, setCopied] = useState("Sharing link");
-  const link = `https://ezrecipe.dev/sharing/${shareToken}`;
+  const link = `https://ezrecipe.dev/share/${shareToken}`;
 
   function copyLink() {
     navigator.clipboard.writeText(link).then(() => {
