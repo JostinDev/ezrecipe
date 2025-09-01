@@ -125,7 +125,7 @@ export async function getRecipeByToken(token: string) {
 
   // only select what you need
   const recipe = await db.query.recipe.findFirst({
-    where: and(eq(schema.recipe.shareToken, token), eq(schema.recipe.userID, userId)),
+    where: and(eq(schema.recipe.shareToken, token)),
     columns: {
       id: true,
       title: true,

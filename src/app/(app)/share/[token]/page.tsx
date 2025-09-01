@@ -11,8 +11,6 @@ export default async function Share({ params }: FolderProps) {
 
   const { id, title, username } = await getRecipeByToken(token);
 
-  console.log(title);
-
   return (
     <div className="mx-auto w-full max-w-[1200px]">
       <h2 className="pt-12 font-ptSerif text-[32px] text-title">
