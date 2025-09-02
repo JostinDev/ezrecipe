@@ -3,15 +3,17 @@
 import Image from "next/image";
 import chevron from "@/app/(app)/img/chevron_left.svg";
 import { useRouter } from "next/navigation";
+import { storage } from "@/utils/sessionStorage";
 
-export default function BackButton() {
+export default function BackButton({ fallback = "/" }: { fallback?: string }) {
   const router = useRouter();
 
   const handleBack = () => {
-    if (window.history.length > 1) {
-      router.back();
+    const navLink = storage.get("navLink");
+    if (navLink) {
+      router.push(storage.get("navLink")!);
     } else {
-      router.push("/");
+      router.push(fallback);
     }
   };
 
